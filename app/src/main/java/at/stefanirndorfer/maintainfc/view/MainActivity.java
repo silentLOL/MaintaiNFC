@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
     @Override
     public void navigateToWriteToTagFragment() {
+        Timber.d("navigating to WriteToTagFragment");
         if (writeToTagFragment == null) {
             writeToTagFragment = WriteToTagFragment.newInstance();
         }
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
     @Override
     public void navigateToReadFromTagFragment() {
+        Timber.d("navigating to ReadFromTagFragment");
         if (readFromTagFragment == null) {
             readFromTagFragment = ReadFromTagFragment.newInstance();
         }
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
     @Override
     public void navigateToFormatTagFragment() {
+        Timber.d("navigating to FormatTagFragment");
         if (formatTagFragment == null) {
             formatTagFragment = FormatTagFragment.newInstance();
         }
@@ -83,11 +86,13 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
     @Override
     public void showHomeButton() {
+        Timber.d("showing back navigation button");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
     public void hideHomeButton() {
+        Timber.d("hiding back navigation button");
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 }

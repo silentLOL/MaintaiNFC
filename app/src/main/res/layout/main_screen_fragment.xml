@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.MainScreenFragment">
+    android:layout_height="wrap_content"
+    tools:context=".view.MainScreenFragment"
+    android:orientation="vertical">
 
-    <TextView
+    <Button
+        android:id="@+id/read_tag_bt"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="wrap_content"
+        android:text="@string/read_tag_bt_label" />
+    <Button
+        android:id="@+id/write_to_tag_bt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/write_to_tag_bt_label" />
+    <Button
+        android:id="@+id/format_tag_bt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/format_tag_bt_label" />
 
-</FrameLayout>
+
+
+</LinearLayout>
