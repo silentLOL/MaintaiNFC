@@ -3,4 +3,6 @@
     <string name="read_tag_bt_label">Read</string>
     <string name="write_to_tag_bt_label">Write</string>
     <string name="format_tag_bt_label">Format Tag</string>
+    <string name="device_does_not_support_nfc_msg">This device doesn\'t support NFC.</string>
+    <string name="approach_nfc_tag_msg">Approach NFC tag</string>
 </resources>

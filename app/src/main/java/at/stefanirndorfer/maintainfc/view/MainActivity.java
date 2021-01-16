@@ -1,7 +1,13 @@
 package at.stefanirndorfer.maintainfc.view;
 
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -16,6 +22,12 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     private ReadFromTagFragment readFromTagFragment;
     private FormatTagFragment formatTagFragment;
 
+
+    NfcAdapter nfcAdapter;
+    PendingIntent pendingIntent;
+    IntentFilter writeTagFilters[];
+    boolean writeMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +39,63 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
             fragmentManager.beginTransaction()
                     .add(R.id.main_fragment_container, mainScreenFragment)
                     .commit();
+        }
+        checkNFCSupport();
+        readFromIntent(getIntent());
+
+        pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+        tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
+        writeTagFilters = new IntentFilter[]{tagDetected};
+    }
+
+    ////////////////////////////////////
+    // Lifecycle handling
+    ////////////////////////////////////
+    @Override
+    public void onPause() {
+        super.onPause();
+        writeModeOff();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        writeModeOn();
+    }
+    ////////////////////////////////////
+    // Lifecycle handling end
+    ////////////////////////////////////
+
+
+    private void checkNFCSupport() {
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        if (nfcAdapter == null) {
+            // Stop here, we definitely need NFC
+            Toast.makeText(this, getString(R.string.device_does_not_support_nfc_msg), Toast.LENGTH_LONG).show();
+            finish();
+        }
+    }
+
+    private void readFromIntent(Intent intent) {
+        String action = intent.getAction();
+        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
+            || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
+            || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+
+            readFromTagFragment = (ReadFromTagFragment) fragmentManager.findFragmentByTag(readFromTagFragment.getClass().getCanonicalName());
+            if (readFromTagFragment == null) {
+                Timber.d("starting read fragment with message");
+                navigateToReadFromTagFragment(rawMsgs);
+                return;
+            }
+            if (readFromTagFragment.isVisible()) {
+                Timber.d("setting message to visible readFromTagFragment");
+                readFromTagFragment.setRawMessage(rawMsgs);
+                return;
+            }
+            Timber.d("tag won't not be red");
         }
     }
 
@@ -48,6 +117,11 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
         }
     }
 
+
+    //////////////////////////////////////////////
+    // NavigationListener
+    //////////////////////////////////////////////
+
     @Override
     public void navigateToWriteToTagFragment() {
         Timber.d("navigating to WriteToTagFragment");
@@ -64,13 +138,26 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     public void navigateToReadFromTagFragment() {
         Timber.d("navigating to ReadFromTagFragment");
         if (readFromTagFragment == null) {
-            readFromTagFragment = ReadFromTagFragment.newInstance();
+            readFromTagFragment = ReadFromTagFragment.newInstance(null);
         }
         fragmentManager.beginTransaction()
                 .replace(R.id.main_fragment_container, readFromTagFragment)
                 .addToBackStack(readFromTagFragment.getClass().getCanonicalName())
                 .commit();
     }
+
+    @Override
+    public void navigateToReadFromTagFragment(Parcelable[] rawMessage) {
+        Timber.d("navigating to ReadFromTagFragment with raw message");
+        if (readFromTagFragment == null) {
+            readFromTagFragment = ReadFromTagFragment.newInstance(rawMessage);
+        }
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_fragment_container, readFromTagFragment)
+                .addToBackStack(readFromTagFragment.getClass().getCanonicalName())
+                .commit();
+    }
+
 
     @Override
     public void navigateToFormatTagFragment() {
@@ -94,5 +181,17 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     public void hideHomeButton() {
         Timber.d("hiding back navigation button");
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
+
+    @Override
+    public void writeModeOn() {
+        writeMode = true;
+        nfcAdapter.enableForegroundDispatch(this, pendingIntent, writeTagFilters, null);
+    }
+
+
+    public void writeModeOff() {
+        writeMode = false;
+        nfcAdapter.disableForegroundDispatch(this);
     }
 }

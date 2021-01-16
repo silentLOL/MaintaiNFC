@@ -28,4 +28,5 @@ task clean(type: Delete) {
 ext {
     timberVersion = '4.7.1'
     butterKnifeVersion = '10.2.3'
+    constraintLayoutVersion = '2.0.4'
 }
