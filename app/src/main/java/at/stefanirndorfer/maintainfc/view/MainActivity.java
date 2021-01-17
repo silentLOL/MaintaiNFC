@@ -161,6 +161,21 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     @Override
     public void navigateToSetDateTimeFragment(int employeeId) {
         Timber.d("navigating to SetDateTimeFragment");
+        SetDateTimeFragment setDateTimeFragment = SetDateTimeFragment.newInstance(employeeId);
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_fragment_container, setDateTimeFragment, SetDateTimeFragment.class.getCanonicalName())
+                .addToBackStack(SetDateTimeFragment.class.getCanonicalName())
+                .commit();
+    }
+
+    @Override
+    public void navigateToSetCommentFragment(long dateTimeInMillis, int empId) {
+        Timber.d("navigating to SetCommentFragment");
+        SetCommentFragment setCommentFragment = SetCommentFragment.newInstance(dateTimeInMillis, empId);
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_fragment_container, setCommentFragment, SetCommentFragment.class.getCanonicalName())
+                .addToBackStack(SetCommentFragment.class.getCanonicalName())
+                .commit();
     }
 
     @Override
@@ -169,9 +184,9 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     }
 
     @Override
-    public void navigateToWriteToTagFragment() {
+    public void navigateToWriteToTagFragment(long dateTimeInMillis, int empId, String comment) {
         Timber.d("navigating to WriteToTagFragment");
-        WriteToTagFragment writeToTagFragment = WriteToTagFragment.newInstance();
+        WriteToTagFragment writeToTagFragment = WriteToTagFragment.newInstance(dateTimeInMillis, empId, comment);
         fragmentManager.beginTransaction()
                 .replace(R.id.main_fragment_container, writeToTagFragment, WriteToTagFragment.class.getCanonicalName())
                 .addToBackStack(WriteToTagFragment.class.getCanonicalName())
@@ -224,6 +239,11 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     @Override
     public void isNFCReadingAllowed(boolean isNFCReadingAllowed) {
         this.isNFCReadingAllowed = isNFCReadingAllowed;
+    }
+
+    @Override
+    public Tag getTag() {
+        return myTag;
     }
 
 }

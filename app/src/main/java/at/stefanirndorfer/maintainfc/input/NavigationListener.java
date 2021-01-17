@@ -1,15 +1,18 @@
 package at.stefanirndorfer.maintainfc.input;
 
+import android.nfc.Tag;
 import android.os.Parcelable;
 
 public interface NavigationListener {
     void navigateToSetEmployeeIdFragment();
 
-    void navigateToSetDateTimeFragment(int epmloyeeId);
+    void navigateToSetDateTimeFragment(int employeeId);
+
+    void navigateToSetCommentFragment(long dateTimeInMillis, int empId);
 
     void navigateToSummaryFragment();
 
-    void navigateToWriteToTagFragment();
+    void navigateToWriteToTagFragment(long dateTimeInMillis, int empId, String comment);
 
     void navigateToReadFromTagFragment();
 
@@ -22,4 +25,6 @@ public interface NavigationListener {
     void hideHomeButton();
 
     void isNFCReadingAllowed(boolean isNFCReadingAllowed);
+
+    Tag getTag();
 }

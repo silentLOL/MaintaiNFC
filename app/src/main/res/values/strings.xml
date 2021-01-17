@@ -5,10 +5,16 @@
     <string name="format_tag_bt_label">Format Tag</string>
     <string name="device_does_not_support_nfc_msg">This device doesn\'t support NFC.</string>
     <string name="approach_nfc_tag_msg">Approach NFC tag</string>
-    <string name="employee_id_label">Employee Id</string>
+    <string name="employee_id_label">Employee Id:</string>
     <string name="pick_date_button_label">Date</string>
     <string name="pick_time_button_label">Time</string>
     <string name="comment_et_hint">Comment</string>
     <string name="your_employee_id_hint">Your Employee Id</string>
     <string name="next">Next</string>
+    <string name="set_date_and_time_bt_label">Set Date and Time</string>
+    <string name="date_label">Date:</string>
+    <string name="time_label">Time:</string>
+    <string name="add_comment_label">Add a comment (optional):</string>
+    <string name="your_comment_hint">Your comment</string>
+    <string name="date_and_time_label">Date and Time:</string>
 </resources>
