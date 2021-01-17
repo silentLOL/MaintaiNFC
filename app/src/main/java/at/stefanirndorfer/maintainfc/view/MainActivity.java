@@ -19,9 +19,6 @@ import timber.log.Timber;
 public class MainActivity extends AppCompatActivity implements NavigationListener {
 
     private FragmentManager fragmentManager;
-    private WriteToTagFragment writeToTagFragment;
-    private ReadFromTagFragment readFromTagFragment;
-    private FormatTagFragment formatTagFragment;
 
 
     NfcAdapter nfcAdapter;
@@ -29,6 +26,11 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     IntentFilter writeTagFilters[];
     boolean writeMode;
     Tag myTag;
+
+    // this determines if a particular fragment in foreground
+    // allows to read nfc. E.g. if we want to write only we don't need to read at the same time
+    // when approaching the tag.
+    private boolean isNFCReadingAllowed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
                     .add(R.id.main_fragment_container, mainScreenFragment)
                     .commit();
         }
+        isNFCReadingAllowed = true; /* for the case the nfc reading was triggered from the outside */
         checkNFCSupport();
         readFromIntent(getIntent());
 
@@ -106,7 +109,12 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
             || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
             || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
             Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-            navigateToReadFromTagFragment(rawMsgs);
+            if (isNFCReadingAllowed) {
+                Timber.d("current fragment allows to read");
+                navigateToReadFromTagFragment(rawMsgs);
+                return;
+            }
+            Timber.d("current fragment does not allow to read");
 
             //            if (readFromTagFragment == null) {
             //                Timber.d("starting read fragment with message");
@@ -149,36 +157,30 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     @Override
     public void navigateToWriteToTagFragment() {
         Timber.d("navigating to WriteToTagFragment");
-        if (writeToTagFragment == null) {
-            writeToTagFragment = WriteToTagFragment.newInstance();
-        }
+        WriteToTagFragment writeToTagFragment = WriteToTagFragment.newInstance();
         fragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_container, writeToTagFragment)
-                .addToBackStack(writeToTagFragment.getClass().getCanonicalName())
+                .replace(R.id.main_fragment_container, writeToTagFragment, WriteToTagFragment.class.getCanonicalName())
+                .addToBackStack(WriteToTagFragment.class.getCanonicalName())
                 .commit();
     }
 
     @Override
     public void navigateToReadFromTagFragment() {
         Timber.d("navigating to ReadFromTagFragment");
-        if (readFromTagFragment == null) {
-            readFromTagFragment = ReadFromTagFragment.newInstance(null);
-        }
+        ReadFromTagFragment readFromTagFragment = ReadFromTagFragment.newInstance(null);
         fragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_container, readFromTagFragment)
-                .addToBackStack(readFromTagFragment.getClass().getCanonicalName())
+                .replace(R.id.main_fragment_container, readFromTagFragment, ReadFromTagFragment.class.getCanonicalName())
+                .addToBackStack(ReadFromTagFragment.class.getCanonicalName())
                 .commit();
     }
 
     @Override
     public void navigateToReadFromTagFragment(Parcelable[] rawMessage) {
         Timber.d("navigating to ReadFromTagFragment with raw message");
-        if (readFromTagFragment == null) {
-            readFromTagFragment = ReadFromTagFragment.newInstance(rawMessage);
-        }
+        ReadFromTagFragment readFromTagFragment = ReadFromTagFragment.newInstance(rawMessage);
         fragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_container, readFromTagFragment)
-                .addToBackStack(readFromTagFragment.getClass().getCanonicalName())
+                .replace(R.id.main_fragment_container, readFromTagFragment, ReadFromTagFragment.class.getCanonicalName())
+                .addToBackStack(ReadFromTagFragment.class.getCanonicalName())
                 .commit();
     }
 
@@ -186,12 +188,10 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     @Override
     public void navigateToFormatTagFragment() {
         Timber.d("navigating to FormatTagFragment");
-        if (formatTagFragment == null) {
-            formatTagFragment = FormatTagFragment.newInstance();
-        }
+        FormatTagFragment formatTagFragment = FormatTagFragment.newInstance();
         fragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_container, formatTagFragment)
-                .addToBackStack(formatTagFragment.getClass().getCanonicalName())
+                .replace(R.id.main_fragment_container, formatTagFragment, FormatTagFragment.class.getCanonicalName())
+                .addToBackStack(FormatTagFragment.class.getCanonicalName())
                 .commit();
     }
 
@@ -205,6 +205,11 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     public void hideHomeButton() {
         Timber.d("hiding back navigation button");
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
+
+    @Override
+    public void isNFCReadingAllowed(boolean isNFCReadingAllowed) {
+        this.isNFCReadingAllowed = isNFCReadingAllowed;
     }
 
 }

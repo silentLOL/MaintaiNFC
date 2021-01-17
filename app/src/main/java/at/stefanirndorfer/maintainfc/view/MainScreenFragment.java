@@ -42,6 +42,7 @@ public class MainScreenFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         navigationListener.hideHomeButton();
+        navigationListener.isNFCReadingAllowed(true); /* we want to read while in foreground */
         View view = inflater.inflate(R.layout.main_screen_fragment, container, false);
         ButterKnife.bind(this, view);
         return view;

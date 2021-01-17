@@ -6,11 +6,8 @@ import android.os.Parcelable;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.util.Calendar;
-import java.util.Date;
 
 import androidx.lifecycle.ViewModel;
-import at.stefanirndorfer.maintainfc.R;
 import timber.log.Timber;
 
 import static at.stefanirndorfer.maintainfc.util.Constants.EMPLOYEE_ID_SIZE;
@@ -74,32 +71,7 @@ public class ReadFromTagViewModel extends ViewModel {
             Timber.e(e);
         }
         Timber.d("setting text to the output view");
-        setSetTagContentToTextOutput(redEmployeeId, redTimeStamp, redComment);
-    }
-
-    private void setSetTagContentToTextOutput(int redEmployeeId, long redTimeStamp, String redComment) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(redTimeStamp);
-        Date date = new Date(redTimeStamp);
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n");
-        sb.append(listener.getContext().getString(R.string.employee_id_label));
-        sb.append("\n");
-        sb.append(redEmployeeId);
-        sb.append("\n");
-        sb.append("\n");
-        sb.append(listener.getContext().getString(R.string.pick_date_button_label));
-        sb.append(" + ");
-        sb.append(listener.getContext().getString(R.string.pick_time_button_label));
-        sb.append(":\n");
-        sb.append(date.toString());
-        sb.append("\n");
-        sb.append("\n");
-        sb.append(listener.getContext().getString(R.string.comment_et_hint));
-        sb.append(":\n");
-        sb.append(redComment);
-
-        listener.setNFCContentText(sb.toString());
+        listener.setSetTagContentToTextOutput(redEmployeeId, redTimeStamp, redComment);
     }
 
     public void setListener(ReadFromTagFragmentViewModelListener readFromTagFragmentViewModelListener) {
@@ -109,6 +81,6 @@ public class ReadFromTagViewModel extends ViewModel {
     public interface ReadFromTagFragmentViewModelListener {
         Context getContext();
 
-        void setNFCContentText(String nfcContent);
+        void setSetTagContentToTextOutput(int redEmployeeId, long redTimeStamp, String redComment);
     }
 }

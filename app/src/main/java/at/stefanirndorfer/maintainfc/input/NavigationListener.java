@@ -14,4 +14,6 @@ public interface NavigationListener {
     void showHomeButton();
 
     void hideHomeButton();
+
+    void isNFCReadingAllowed(boolean isNFCReadingAllowed);
 }

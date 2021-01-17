@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -44,6 +47,7 @@ public class ReadFromTagFragment extends Fragment implements ReadFromTagViewMode
                              @Nullable Bundle savedInstanceState) {
         Timber.d("onCreateView");
         navigationListener.showHomeButton();
+        navigationListener.isNFCReadingAllowed(true); /* we want to read while in foreground */
         if (getArguments().getParcelableArray(RAW_MESSAGE_KEY) != null) {
             Timber.d("setting rawMessage from arguments");
             rawMessage = getArguments().getParcelableArray(RAW_MESSAGE_KEY);
@@ -57,7 +61,6 @@ public class ReadFromTagFragment extends Fragment implements ReadFromTagViewMode
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(ReadFromTagViewModel.class);
-        viewModel.setListener(this);
     }
 
     @Override
@@ -74,9 +77,12 @@ public class ReadFromTagFragment extends Fragment implements ReadFromTagViewMode
     public void onResume() {
         super.onResume();
         Timber.d("onResume");
+        viewModel.setListener(this);
         if (rawMessage != null) {
             Timber.d("setting rawMessage to viewModel");
             viewModel.processNewMessage(rawMessage);
+        } else {
+            Timber.d("no rawMessage set yet");
         }
     }
 
@@ -85,11 +91,44 @@ public class ReadFromTagFragment extends Fragment implements ReadFromTagViewMode
         viewModel.processNewMessage(rawMessage);
     }
 
+    private void setNFCContentText(String nfcContent) {
+        nfcContentOutput.setText(nfcContent);
+    }
+
     /////////////////////////////////////////////////////
     // viewModel Listener
     /////////////////////////////////////////////////////
+
+    @Nullable
     @Override
-    public void setNFCContentText(String nfcContent) {
-        nfcContentOutput.setText(nfcContent);
+    public Context getContext() {
+        return this.getActivity();
+    }
+
+    @Override
+    public void setSetTagContentToTextOutput(int redEmployeeId, long redTimeStamp, String redComment) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(redTimeStamp);
+        Date date = new Date(redTimeStamp);
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n");
+        sb.append(this.getString(R.string.employee_id_label));
+        sb.append("\n");
+        sb.append(redEmployeeId);
+        sb.append("\n");
+        sb.append("\n");
+        sb.append(this.getString(R.string.pick_date_button_label));
+        sb.append(" + ");
+        sb.append(this.getString(R.string.pick_time_button_label));
+        sb.append(":\n");
+        sb.append(date.toString());
+        sb.append("\n");
+        sb.append("\n");
+        sb.append(this.getString(R.string.comment_et_hint));
+        sb.append(":\n");
+        sb.append(redComment);
+
+        setNFCContentText(sb.toString());
+
     }
 }
