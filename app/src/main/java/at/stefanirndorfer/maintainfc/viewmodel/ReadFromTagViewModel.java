@@ -6,8 +6,11 @@ import android.os.Parcelable;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.util.Calendar;
+import java.util.Date;
 
 import androidx.lifecycle.ViewModel;
+import at.stefanirndorfer.maintainfc.R;
 import timber.log.Timber;
 
 import static at.stefanirndorfer.maintainfc.util.Constants.EMPLOYEE_ID_SIZE;
@@ -15,6 +18,8 @@ import static at.stefanirndorfer.maintainfc.util.Constants.OUR_HEADER_LENGTH;
 import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_SIZE;
 
 public class ReadFromTagViewModel extends ViewModel {
+
+    private ReadFromTagFragmentViewModelListener listener;
 
     public ReadFromTagViewModel() {
         super();
@@ -73,13 +78,37 @@ public class ReadFromTagViewModel extends ViewModel {
     }
 
     private void setSetTagContentToTextOutput(int redEmployeeId, long redTimeStamp, String redComment) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(redTimeStamp);
+        Date date = new Date(redTimeStamp);
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n");
+        sb.append(listener.getContext().getString(R.string.employee_id_label));
+        sb.append("\n");
+        sb.append(redEmployeeId);
+        sb.append("\n");
+        sb.append("\n");
+        sb.append(listener.getContext().getString(R.string.pick_date_button_label));
+        sb.append(" + ");
+        sb.append(listener.getContext().getString(R.string.pick_time_button_label));
+        sb.append(":\n");
+        sb.append(date.toString());
+        sb.append("\n");
+        sb.append("\n");
+        sb.append(listener.getContext().getString(R.string.comment_et_hint));
+        sb.append(":\n");
+        sb.append(redComment);
 
+        listener.setNFCContentText(sb.toString());
     }
 
     public void setListener(ReadFromTagFragmentViewModelListener readFromTagFragmentViewModelListener) {
+        this.listener = readFromTagFragmentViewModelListener;
     }
 
     public interface ReadFromTagFragmentViewModelListener {
         Context getContext();
+
+        void setNFCContentText(String nfcContent);
     }
 }

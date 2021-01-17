@@ -14,8 +14,4 @@ public interface NavigationListener {
     void showHomeButton();
 
     void hideHomeButton();
-
-    void writeModeOn();
-
-    void writeModeOff();
 }

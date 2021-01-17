@@ -31,7 +31,6 @@ public class WriteToTagFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         navigationListener.showHomeButton();
-        navigationListener.writeModeOn();
         return inflater.inflate(R.layout.write_to_tag_fragment, container, false);
     }
 

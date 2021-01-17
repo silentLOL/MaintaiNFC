@@ -32,7 +32,6 @@ public class FormatTagFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         navigationListener.showHomeButton();
-        navigationListener.writeModeOn();
         return inflater.inflate(R.layout.format_tag_fragment, container, false);
     }
 
