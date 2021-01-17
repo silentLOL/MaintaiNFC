@@ -3,6 +3,12 @@ package at.stefanirndorfer.maintainfc.input;
 import android.os.Parcelable;
 
 public interface NavigationListener {
+    void navigateToSetEmployeeIdFragment();
+
+    void navigateToSetDateTimeFragment(int epmloyeeId);
+
+    void navigateToSummaryFragment();
+
     void navigateToWriteToTagFragment();
 
     void navigateToReadFromTagFragment();

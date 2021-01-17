@@ -149,6 +149,26 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     //////////////////////////////////////////////
 
     @Override
+    public void navigateToSetEmployeeIdFragment() {
+        Timber.d("navigating to SetEmployeeIdFragment");
+        SetEmployeeIdFragment setEmployeeIdFragment = SetEmployeeIdFragment.newInstance();
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_fragment_container, setEmployeeIdFragment, SetEmployeeIdFragment.class.getCanonicalName())
+                .addToBackStack(SetEmployeeIdFragment.class.getCanonicalName())
+                .commit();
+    }
+
+    @Override
+    public void navigateToSetDateTimeFragment(int employeeId) {
+        Timber.d("navigating to SetDateTimeFragment");
+    }
+
+    @Override
+    public void navigateToSummaryFragment() {
+        Timber.d("navigating to SummaryFragment");
+    }
+
+    @Override
     public void navigateToWriteToTagFragment() {
         Timber.d("navigating to WriteToTagFragment");
         WriteToTagFragment writeToTagFragment = WriteToTagFragment.newInstance();

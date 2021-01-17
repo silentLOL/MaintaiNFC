@@ -9,4 +9,6 @@
     <string name="pick_date_button_label">Date</string>
     <string name="pick_time_button_label">Time</string>
     <string name="comment_et_hint">Comment</string>
+    <string name="your_employee_id_hint">Your Employee Id</string>
+    <string name="next">Next</string>
 </resources>

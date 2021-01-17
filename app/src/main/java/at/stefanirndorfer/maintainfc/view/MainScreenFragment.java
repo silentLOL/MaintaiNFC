@@ -18,16 +18,14 @@ import at.stefanirndorfer.maintainfc.input.NavigationListener;
 import at.stefanirndorfer.maintainfc.viewmodel.MainScreenViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
-import timber.log.Timber;
 
 public class MainScreenFragment extends Fragment {
 
     @BindView(R.id.read_tag_bt)
     Button navToReadButton;
-    @BindView(R.id.write_to_tag_bt)
-    Button navToWriteButton;
+    @BindView(R.id.start_write_flow_bt)
+    Button navToWriteFlowButton;
     @BindView(R.id.format_tag_bt)
     Button navToFormatButton;
 
@@ -69,9 +67,9 @@ public class MainScreenFragment extends Fragment {
     void navigateToReadFragment(){
         navigationListener.navigateToReadFromTagFragment();
     }
-    @OnClick(R.id.write_to_tag_bt)
+    @OnClick(R.id.start_write_flow_bt)
     void navigateToWriteToTagFragment(){
-        navigationListener.navigateToWriteToTagFragment();
+        navigationListener.navigateToSetEmployeeIdFragment();
     }
     @OnClick(R.id.format_tag_bt)
     void navigateToFormatTagFragment(){

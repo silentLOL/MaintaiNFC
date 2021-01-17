@@ -3,5 +3,13 @@ package at.stefanirndorfer.maintainfc.viewmodel;
 import androidx.lifecycle.ViewModel;
 
 public class WriteToTagViewModel extends ViewModel {
-    // TODO: Implement the ViewModel
+
+    private WriteToTagViewModelListener listener;
+
+    public void setListener(WriteToTagViewModelListener listener){
+        this.listener = listener;
+    }
+    public interface WriteToTagViewModelListener{
+
+    }
 }

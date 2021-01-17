@@ -1,24 +1,22 @@
 package at.stefanirndorfer.maintainfc.view;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import at.stefanirndorfer.maintainfc.R;
-import at.stefanirndorfer.maintainfc.input.NavigationListener;
-import at.stefanirndorfer.maintainfc.viewmodel.WriteToTagViewModel;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.jetbrains.annotations.NotNull;
 
-public class WriteToTagFragment extends Fragment {
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import at.stefanirndorfer.maintainfc.R;
+import at.stefanirndorfer.maintainfc.input.NavigationListener;
+import at.stefanirndorfer.maintainfc.viewmodel.WriteToTagViewModel;
+
+public class WriteToTagFragment extends Fragment implements WriteToTagViewModel.WriteToTagViewModelListener {
 
     private WriteToTagViewModel mViewModel;
     private NavigationListener navigationListener;
@@ -39,7 +37,7 @@ public class WriteToTagFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(WriteToTagViewModel.class);
-        // TODO: Use the ViewModel
+        mViewModel.setListener(this);
     }
 
     @Override
