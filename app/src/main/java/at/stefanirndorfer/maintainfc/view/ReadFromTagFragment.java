@@ -33,6 +33,9 @@ public class ReadFromTagFragment extends Fragment implements ReadFromTagViewMode
     @BindView
             (R.id.nfc_content_tv)
     TextView nfcContentOutput;
+    @BindView
+            (R.id.approach_nfc_tag_msg_tv)
+    TextView approachNFCTagMsg;
 
     public static ReadFromTagFragment newInstance(Parcelable[] rawMessage) {
         ReadFromTagFragment fragment = new ReadFromTagFragment();
@@ -78,17 +81,29 @@ public class ReadFromTagFragment extends Fragment implements ReadFromTagViewMode
         super.onResume();
         Timber.d("onResume");
         viewModel.setListener(this);
+        approachNFCTagMsg.setVisibility(View.VISIBLE);
         if (rawMessage != null) {
-            Timber.d("setting rawMessage to viewModel");
-            viewModel.processNewMessage(rawMessage);
+            getTranslationFromViewModel();
         } else {
             Timber.d("no rawMessage set yet");
         }
     }
 
+    private void getTranslationFromViewModel() {
+        Timber.d("setting rawMessage to viewModel");
+        approachNFCTagMsg.setVisibility(View.GONE);
+        viewModel.processNewMessage(rawMessage);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Timber.d("onPause");
+    }
+
     public void setRawMessage(Parcelable[] rawMessage) {
         this.rawMessage = rawMessage;
-        viewModel.processNewMessage(rawMessage);
+        getTranslationFromViewModel();
     }
 
     private void setNFCContentText(String nfcContent) {
@@ -98,12 +113,6 @@ public class ReadFromTagFragment extends Fragment implements ReadFromTagViewMode
     /////////////////////////////////////////////////////
     // viewModel Listener
     /////////////////////////////////////////////////////
-
-    @Nullable
-    @Override
-    public Context getContext() {
-        return this.getActivity();
-    }
 
     @Override
     public void setSetTagContentToTextOutput(int redEmployeeId, long redTimeStamp, String redComment) {
@@ -127,8 +136,6 @@ public class ReadFromTagFragment extends Fragment implements ReadFromTagViewMode
         sb.append(this.getString(R.string.comment_et_hint));
         sb.append(":\n");
         sb.append(redComment);
-
         setNFCContentText(sb.toString());
-
     }
 }

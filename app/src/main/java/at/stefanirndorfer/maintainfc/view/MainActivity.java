@@ -111,23 +111,17 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
             Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
             if (isNFCReadingAllowed) {
                 Timber.d("current fragment allows to read");
+                ReadFromTagFragment readFromTagFragment = (ReadFromTagFragment) fragmentManager.findFragmentByTag(ReadFromTagFragment.class.getCanonicalName());
+                if (readFromTagFragment != null) {
+                    Timber.d("message can be set to an existing ReadFromTagFragment");
+                    readFromTagFragment.setRawMessage(rawMsgs);
+                    return;
+                }
+                Timber.d("navigating to ReadFromTagFragment with a rawMessage");
                 navigateToReadFromTagFragment(rawMsgs);
                 return;
             }
             Timber.d("current fragment does not allow to read");
-
-            //            if (readFromTagFragment == null) {
-            //                Timber.d("starting read fragment with message");
-            //                navigateToReadFromTagFragment(rawMsgs);
-            //                return;
-            //            }
-            //            readFromTagFragment = (ReadFromTagFragment) fragmentManager.findFragmentByTag(ReadFromTagFragment.class.getCanonicalName());
-            //            if (readFromTagFragment != null && readFromTagFragment.isVisible()) {
-            //                Timber.d("setting message to visible readFromTagFragment");
-            //                readFromTagFragment.setRawMessage(rawMsgs);
-            //                return;
-            //            }
-            //            Timber.d("tag won't not be red");
         }
     }
 
