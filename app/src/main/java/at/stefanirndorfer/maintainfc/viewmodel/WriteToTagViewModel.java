@@ -19,7 +19,8 @@ import static at.stefanirndorfer.maintainfc.util.Constants.COMMENT_INDEX;
 import static at.stefanirndorfer.maintainfc.util.Constants.EMPLOYEE_ID_INDEX;
 import static at.stefanirndorfer.maintainfc.util.Constants.EMPLOYEE_ID_SIZE;
 import static at.stefanirndorfer.maintainfc.util.Constants.OUR_HEADER_LENGTH;
-import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_INDEX;
+import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_NEXT_INDEX;
+import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_THIS_INDEX;
 import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_SIZE;
 
 public class WriteToTagViewModel extends ViewModel {
@@ -45,16 +46,19 @@ public class WriteToTagViewModel extends ViewModel {
      * @throws FormatException
      */
     public void write(long timestamp, int employeeId, String comment, Tag tag) throws IOException, FormatException {
+        long timeStampNext = timestamp + 20000; /*for testing purposes -- replace with real data*/
         if (tag == null) {
             Timber.d("tag is null");
+            return;
         }
         if (comment == null || TextUtils.isEmpty(comment)){
             comment = "";
         }
         byte[] employeeIdBytes = ByteBuffer.allocate(EMPLOYEE_ID_SIZE).putInt(employeeId).array();
-        byte[] timestampBytes = ByteBuffer.allocate(TIMESTAMP_SIZE).putLong(timestamp).array();
+        byte[] timestampThisBytes = ByteBuffer.allocate(TIMESTAMP_SIZE).putLong(timestamp).array();
+        byte[] timestampNextBytes = ByteBuffer.allocate(TIMESTAMP_SIZE).putLong(timeStampNext).array();
         byte[] commentBytes = comment.getBytes();
-        int payloadLen = employeeIdBytes.length + timestampBytes.length + commentBytes.length;
+        int payloadLen = employeeIdBytes.length + timestampThisBytes.length + commentBytes.length;
         byte[] headerBytes = new byte[OUR_HEADER_LENGTH];
         short len = (short) (payloadLen + OUR_HEADER_LENGTH);
         headerBytes[4] = (byte) (len >>> 8);
@@ -67,7 +71,8 @@ public class WriteToTagViewModel extends ViewModel {
         byte[] fullBytes = new byte[OUR_HEADER_LENGTH + payloadLen];
         System.arraycopy(headerBytes, 0, fullBytes, 0, OUR_HEADER_LENGTH);
         System.arraycopy(employeeIdBytes, 0, fullBytes, EMPLOYEE_ID_INDEX, employeeIdBytes.length);
-        System.arraycopy(timestampBytes, 0, fullBytes, TIMESTAMP_INDEX, timestampBytes.length);
+        System.arraycopy(timestampThisBytes, 0, fullBytes, TIMESTAMP_THIS_INDEX, timestampThisBytes.length);
+        System.arraycopy(timestampNextBytes, 0, fullBytes, TIMESTAMP_NEXT_INDEX, timestampNextBytes.length);
         System.arraycopy(commentBytes, 0, fullBytes, COMMENT_INDEX, commentBytes.length);
         NdefRecord[] records = {createRecord(fullBytes)};
         NdefMessage message = new NdefMessage(records);
