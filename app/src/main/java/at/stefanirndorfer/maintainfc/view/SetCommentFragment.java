@@ -24,6 +24,7 @@ import java.util.Date;
 
 import at.stefanirndorfer.maintainfc.R;
 import at.stefanirndorfer.maintainfc.input.NavigationListener;
+import at.stefanirndorfer.maintainfc.viewmodel.SetCommentViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

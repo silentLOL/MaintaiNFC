@@ -179,8 +179,13 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     }
 
     @Override
-    public void navigateToSummaryFragment() {
+    public void navigateToSummaryFragment(Bundle arguments) {
         Timber.d("navigating to SummaryFragment");
+        SummaryFragment summaryFragment = SummaryFragment.newInstance(arguments);
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_fragment_container, summaryFragment, SummaryFragment.class.getCanonicalName())
+                .addToBackStack(SummaryFragment.class.getCanonicalName())
+                .commit();
     }
 
     @Override
@@ -221,6 +226,16 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
         fragmentManager.beginTransaction()
                 .replace(R.id.main_fragment_container, formatTagFragment, FormatTagFragment.class.getCanonicalName())
                 .addToBackStack(FormatTagFragment.class.getCanonicalName())
+                .commit();
+    }
+
+    @Override
+    public void navigateToMain() {
+        Timber.d("navigating to MainScreenFragment");
+        MainScreenFragment mainScreenFragment = MainScreenFragment.newInstance();
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_fragment_container, mainScreenFragment, MainScreenFragment.class.getCanonicalName())
+                .addToBackStack(MainScreenFragment.class.getCanonicalName())
                 .commit();
     }
 

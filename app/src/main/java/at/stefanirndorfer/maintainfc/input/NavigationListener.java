@@ -1,6 +1,7 @@
 package at.stefanirndorfer.maintainfc.input;
 
 import android.nfc.Tag;
+import android.os.Bundle;
 import android.os.Parcelable;
 
 public interface NavigationListener {
@@ -10,7 +11,7 @@ public interface NavigationListener {
 
     void navigateToSetCommentFragment(long dateTimeInMillis, int empId);
 
-    void navigateToSummaryFragment();
+    void navigateToSummaryFragment(Bundle arguments);
 
     void navigateToWriteToTagFragment(long dateTimeInMillis, int empId, String comment);
 
@@ -20,11 +21,18 @@ public interface NavigationListener {
 
     void navigateToFormatTagFragment();
 
+    void navigateToMain();
+
     void showHomeButton();
 
     void hideHomeButton();
 
     void isNFCReadingAllowed(boolean isNFCReadingAllowed);
 
+    /**
+     * dodo move to a sedicated interface class -- does not fit here
+     * @return
+     */
     Tag getTag();
+
 }

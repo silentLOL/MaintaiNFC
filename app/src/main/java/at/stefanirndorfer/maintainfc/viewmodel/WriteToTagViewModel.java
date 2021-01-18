@@ -4,7 +4,8 @@ import android.nfc.FormatException;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.Tag;
-import android.nfc.tech.NdefFormatable;
+import android.nfc.tech.Ndef;
+import android.text.TextUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -25,7 +26,7 @@ public class WriteToTagViewModel extends ViewModel {
 
     private WriteToTagViewModelListener listener;
 
-    public void setListener(WriteToTagViewModelListener listener){
+    public void setListener(WriteToTagViewModelListener listener) {
         this.listener = listener;
     }
 
@@ -47,7 +48,9 @@ public class WriteToTagViewModel extends ViewModel {
         if (tag == null) {
             Timber.d("tag is null");
         }
-
+        if (comment == null || TextUtils.isEmpty(comment)){
+            comment = "";
+        }
         byte[] employeeIdBytes = ByteBuffer.allocate(EMPLOYEE_ID_SIZE).putInt(employeeId).array();
         byte[] timestampBytes = ByteBuffer.allocate(TIMESTAMP_SIZE).putLong(timestamp).array();
         byte[] commentBytes = comment.getBytes();
@@ -70,24 +73,25 @@ public class WriteToTagViewModel extends ViewModel {
         NdefMessage message = new NdefMessage(records);
         try {
             // this is needed in case you have a new NFC Tag and it needs to be formatted before use
-            String[] techList = tag.getTechList();
-            NdefFormatable ndefFormatable = NdefFormatable.get(tag);
-            ndefFormatable.connect();
-            ndefFormatable.format(message);
-            ndefFormatable.close();
+            //            String[] techList = tag.getTechList();
+            //            NdefFormatable ndefFormatable = NdefFormatable.get(tag);
+            //            ndefFormatable.connect();
+            //            ndefFormatable.format(message);
+            //            ndefFormatable.close();
 
-            //            // Get an instance of Ndef for the tag.
-            //            Ndef ndef = Ndef.get(tag);
-            //            // Enable I/O
-            //            ndef.connect();
-            //            // Write the message
-            //            ndef.writeNdefMessage(message);
-            //            // Close the connection
-            //            ndef.close();
+            // Get an instance of Ndef for the tag.
+            Ndef ndef = Ndef.get(tag);
+            // Enable I/O
+            ndef.connect();
+            // Write the message
+            ndef.writeNdefMessage(message);
+            // Close the connection
+            ndef.close();
+            listener.successfullyWrittenToTag(true);
         } catch (Exception e) {
-            Timber.d( "error writing connecting");
+            Timber.d("error writing connecting");
             Timber.e(e);
-            e.printStackTrace();
+            listener.successfullyWrittenToTag(false);
         }
     }
 
@@ -127,9 +131,9 @@ public class WriteToTagViewModel extends ViewModel {
         }
         return crc_value;
     }
-    
-    
-    public interface WriteToTagViewModelListener{
+
+
+    public interface WriteToTagViewModelListener {
         void successfullyWrittenToTag(boolean isSuccess);
     }
 }
