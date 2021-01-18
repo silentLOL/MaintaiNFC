@@ -115,10 +115,11 @@ public class ReadFromTagFragment extends Fragment implements ReadFromTagViewMode
     /////////////////////////////////////////////////////
 
     @Override
-    public void setSetTagContentToTextOutput(int redEmployeeId, long redTimeStamp, String redComment) {
+    public void setSetTagContentToTextOutput(int redEmployeeId, long redTimeStamp, long redTimeStampNext, String redComment) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(redTimeStamp);
         Date date = new Date(redTimeStamp);
+        Date dateNext = new Date(redTimeStampNext);
         StringBuilder sb = new StringBuilder();
         sb.append("\n");
         sb.append(this.getString(R.string.employee_id_label));
@@ -131,6 +132,13 @@ public class ReadFromTagFragment extends Fragment implements ReadFromTagViewMode
         sb.append(this.getString(R.string.pick_time_button_label));
         sb.append(":\n");
         sb.append(date.toString());
+        sb.append("\n");
+        sb.append("\n");
+        sb.append(this.getString(R.string.pick_date_button_label));
+        sb.append(" + ");
+        sb.append(this.getString(R.string.pick_time_button_label));
+        sb.append(":\n");
+        sb.append(dateNext.toString());
         sb.append("\n");
         sb.append("\n");
         sb.append(this.getString(R.string.comment_et_hint));

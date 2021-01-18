@@ -42,6 +42,7 @@ public class ReadFromTagViewModel extends ViewModel {
         String redComment = "";
         int redEmployeeId = 0;
         long redTimeStamp = 0;
+        long redTimeStampNext = 0;
 
         //        String tagId = new String(msgs[0].getRecords()[0].getType());
         byte[] payload = msgs[0].getRecords()[0].getPayload();
@@ -50,7 +51,8 @@ public class ReadFromTagViewModel extends ViewModel {
         // String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
         int employeeIdOffset = languageCodeLength + 1 + OUR_HEADER_LENGTH;
         int timestampOffset = employeeIdOffset + EMPLOYEE_ID_SIZE;
-        int commentOffset = timestampOffset + TIMESTAMP_SIZE;
+        int timestampNextOffset = timestampOffset + TIMESTAMP_SIZE;
+        int commentOffset = timestampNextOffset + TIMESTAMP_SIZE;
         try {
             // get the employee id
             byte[] employeeIdBytes = new byte[EMPLOYEE_ID_SIZE];
@@ -64,6 +66,13 @@ public class ReadFromTagViewModel extends ViewModel {
             redTimeStamp = ByteBuffer.wrap(timestampBytes).getLong();
             Timber.d("the timestamp red from the tag is: " + redTimeStamp);
 
+            // get the timestampNext
+            byte[] timestampNextBytes = new byte[TIMESTAMP_SIZE];
+            System.arraycopy(payload, timestampNextOffset, timestampNextBytes, 0, TIMESTAMP_SIZE);
+            redTimeStampNext = ByteBuffer.wrap(timestampNextBytes).getLong();
+            Timber.d("the timestamp red from the tag is: " + redTimeStampNext);
+
+
             // get the Comment
             redComment = new String(payload, commentOffset, payload.length - commentOffset, textEncoding);
             Timber.d("the comment red from the tag is: " + redComment);
@@ -71,7 +80,7 @@ public class ReadFromTagViewModel extends ViewModel {
             Timber.e(e);
         }
         Timber.d("setting text to the output view");
-        listener.setSetTagContentToTextOutput(redEmployeeId, redTimeStamp, redComment);
+        listener.setSetTagContentToTextOutput(redEmployeeId, redTimeStamp, redTimeStampNext, redComment);
     }
 
     public void setListener(ReadFromTagFragmentViewModelListener readFromTagFragmentViewModelListener) {
@@ -81,6 +90,6 @@ public class ReadFromTagViewModel extends ViewModel {
     public interface ReadFromTagFragmentViewModelListener {
         Context getContext();
 
-        void setSetTagContentToTextOutput(int redEmployeeId, long redTimeStamp, String redComment);
+        void setSetTagContentToTextOutput(int redEmployeeId, long redTimeStamp, long redTimeStampNext, String redComment);
     }
 }

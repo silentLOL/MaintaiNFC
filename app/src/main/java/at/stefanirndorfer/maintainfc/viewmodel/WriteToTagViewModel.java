@@ -20,8 +20,8 @@ import static at.stefanirndorfer.maintainfc.util.Constants.EMPLOYEE_ID_INDEX;
 import static at.stefanirndorfer.maintainfc.util.Constants.EMPLOYEE_ID_SIZE;
 import static at.stefanirndorfer.maintainfc.util.Constants.OUR_HEADER_LENGTH;
 import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_NEXT_INDEX;
-import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_THIS_INDEX;
 import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_SIZE;
+import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_THIS_INDEX;
 
 public class WriteToTagViewModel extends ViewModel {
 
@@ -51,14 +51,14 @@ public class WriteToTagViewModel extends ViewModel {
             Timber.d("tag is null");
             return;
         }
-        if (comment == null || TextUtils.isEmpty(comment)){
+        if (comment == null || TextUtils.isEmpty(comment)) {
             comment = "";
         }
         byte[] employeeIdBytes = ByteBuffer.allocate(EMPLOYEE_ID_SIZE).putInt(employeeId).array();
         byte[] timestampThisBytes = ByteBuffer.allocate(TIMESTAMP_SIZE).putLong(timestamp).array();
         byte[] timestampNextBytes = ByteBuffer.allocate(TIMESTAMP_SIZE).putLong(timeStampNext).array();
         byte[] commentBytes = comment.getBytes();
-        int payloadLen = employeeIdBytes.length + timestampThisBytes.length + commentBytes.length;
+        int payloadLen = employeeIdBytes.length + timestampThisBytes.length + timestampNextBytes.length + commentBytes.length;
         byte[] headerBytes = new byte[OUR_HEADER_LENGTH];
         short len = (short) (payloadLen + OUR_HEADER_LENGTH);
         headerBytes[4] = (byte) (len >>> 8);
@@ -78,7 +78,7 @@ public class WriteToTagViewModel extends ViewModel {
         NdefMessage message = new NdefMessage(records);
         try {
             // this is needed in case you have a new NFC Tag and it needs to be formatted before use
-            //            String[] techList = tag.getTechList();
+            String[] techList = tag.getTechList();
             //            NdefFormatable ndefFormatable = NdefFormatable.get(tag);
             //            ndefFormatable.connect();
             //            ndefFormatable.format(message);
