@@ -1,14 +1,7 @@
 package at.stefanirndorfer.maintainfc.view;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -22,8 +15,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Calendar;
 import java.util.Date;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import at.stefanirndorfer.maintainfc.R;
 import at.stefanirndorfer.maintainfc.input.NavigationListener;
+import at.stefanirndorfer.maintainfc.model.MaintenanceData;
 import at.stefanirndorfer.maintainfc.viewmodel.SetCommentViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,8 +29,8 @@ import butterknife.OnClick;
 
 public class SetCommentFragment extends Fragment {
 
-    private static final String MILLIS_KEY = "MILLIS";
-    private static final String EMP_ID_KEY = "EMP_ID_KEY";
+    private static final String MAINTENANCE_DATA_KEY = "MAINTENANCE_DATA_KEY";
+
 
     private SetCommentViewModel viewModel;
     private NavigationListener navigationListener;
@@ -48,15 +46,17 @@ public class SetCommentFragment extends Fragment {
 
     @BindView(R.id.date_and_time_result)
     TextView dateAndTimeResult;
-    private String comment;
-    private long millis;
-    private int empId;
 
-    public static SetCommentFragment newInstance(long millis, int empId) {
+    @BindView(R.id.next_date_and_time_result)
+    TextView nextDateAndTimeResult;
+
+    private String comment;
+    private MaintenanceData maintenanceData;
+
+    public static SetCommentFragment newInstance(MaintenanceData maintenanceData) {
         SetCommentFragment setCommentFragment = new SetCommentFragment();
         Bundle args = new Bundle();
-        args.putLong(MILLIS_KEY, millis);
-        args.putInt(EMP_ID_KEY, empId);
+        args.putParcelable(MAINTENANCE_DATA_KEY, maintenanceData);
         setCommentFragment.setArguments(args);
         return setCommentFragment;
     }
@@ -90,13 +90,15 @@ public class SetCommentFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        empId = getArguments().getInt(EMP_ID_KEY);
-        employeeIdTextView.setText(String.valueOf(empId));
-        millis = getArguments().getLong(MILLIS_KEY);
+        maintenanceData = getArguments().getParcelable(MAINTENANCE_DATA_KEY);
+        employeeIdTextView.setText(String.valueOf(maintenanceData.getEmployeeId()));
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(millis);
-        Date date = new Date(millis);
+        calendar.setTimeInMillis(maintenanceData.getTimestamp());
+        Date date = new Date(maintenanceData.getTimestamp());
         dateAndTimeResult.setText(date.toString());
+        calendar.setTimeInMillis(maintenanceData.getNextTimestamp());
+        Date nextDate = new Date(maintenanceData.getNextTimestamp());
+        nextDateAndTimeResult.setText(nextDate.toString());
         addTextWatcherToCommentInput();
     }
 
@@ -121,7 +123,8 @@ public class SetCommentFragment extends Fragment {
     }
 
     @OnClick(R.id.comment_next_bt)
-    public void navigateForward(){
-        navigationListener.navigateToWriteToTagFragment(millis, empId, comment);
+    public void navigateForward() {
+        maintenanceData.setComment(comment);
+        navigationListener.navigateToWriteToTagFragment(maintenanceData);
     }
 }

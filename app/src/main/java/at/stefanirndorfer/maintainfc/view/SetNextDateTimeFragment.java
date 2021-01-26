@@ -14,6 +14,7 @@ import android.widget.TextView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,34 +24,38 @@ import at.stefanirndorfer.maintainfc.R;
 import at.stefanirndorfer.maintainfc.input.NavigationListener;
 import at.stefanirndorfer.maintainfc.model.MaintenanceData;
 import at.stefanirndorfer.maintainfc.util.CalendarUtils;
-import at.stefanirndorfer.maintainfc.viewmodel.SetDateTimeViewModel;
+import at.stefanirndorfer.maintainfc.viewmodel.SetNextDateTimeViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-public class SetDateTimeFragment extends Fragment implements SetDateTimeViewModel.SetDateTimeViewModelListener {
+public class SetNextDateTimeFragment extends Fragment implements SetNextDateTimeViewModel.SetNextDateTimeViewModelListener {
 
     private static final String MAINTENANCE_DATA_KEY = "MAINTENANCE_DATA_KEY";
-    private SetDateTimeViewModel mViewModel;
+    private SetNextDateTimeViewModel mViewModel;
     private NavigationListener navigationListener;
+
     @BindView(R.id.employee_id_result)
     TextView employeeIdTextView;
 
-    @BindView(R.id.date_time_next_bt)
+    @BindView(R.id.this_date_time_result)
+    TextView thisDateTimeResult;
+
+    @BindView(R.id.next_date_time_next_bt)
     Button nextButton;
 
-    @BindView(R.id.set_date_time_bt)
-    Button setDateTimeButton;
+    @BindView(R.id.set_next_date_time_bt)
+    Button setNextDateTimeButton;
 
-    @BindView(R.id.date_time_result_container)
-    LinearLayout dateTimeResultContainer;
+    @BindView(R.id.next_date_time_result_container)
+    LinearLayout nextDateTimeResultContainer;
 
     @BindView(R.id.date_result)
-    TextView dateResult;
+    TextView nextDateResult;
 
     @BindView(R.id.time_result)
-    TextView timeResult;
+    TextView nextTimeResult;
 
     private long dateTimeInMillis;
     private int year;
@@ -60,12 +65,12 @@ public class SetDateTimeFragment extends Fragment implements SetDateTimeViewMode
     private int minute;
     private MaintenanceData maintenanceData;
 
-    public static SetDateTimeFragment newInstance(MaintenanceData maintenanceData) {
-        SetDateTimeFragment setDateTimeFragment = new SetDateTimeFragment();
+    public static SetNextDateTimeFragment newInstance(MaintenanceData maintenanceData) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(MAINTENANCE_DATA_KEY, maintenanceData);
-        setDateTimeFragment.setArguments(bundle);
-        return setDateTimeFragment;
+        SetNextDateTimeFragment setNextDateTimeFragment = new SetNextDateTimeFragment();
+        setNextDateTimeFragment.setArguments(bundle);
+        return setNextDateTimeFragment;
     }
 
     @Override
@@ -73,7 +78,7 @@ public class SetDateTimeFragment extends Fragment implements SetDateTimeViewMode
                              @Nullable Bundle savedInstanceState) {
         navigationListener.showHomeButton();
         navigationListener.isNFCReadingAllowed(false); /* we only want to write while this fragment is in foreground */
-        View view = inflater.inflate(R.layout.set_date_time_fragment, container, false);
+        View view = inflater.inflate(R.layout.set_next_date_time_fragment, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -81,7 +86,7 @@ public class SetDateTimeFragment extends Fragment implements SetDateTimeViewMode
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(SetDateTimeViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(SetNextDateTimeViewModel.class);
         mViewModel.setListener(this);
     }
 
@@ -101,12 +106,13 @@ public class SetDateTimeFragment extends Fragment implements SetDateTimeViewMode
         Timber.d("onResume");
         maintenanceData = getArguments().getParcelable(MAINTENANCE_DATA_KEY);
         employeeIdTextView.setText(String.valueOf(maintenanceData.getEmployeeId()));
+        thisDateTimeResult.setText(new Date(maintenanceData.getTimestamp()).toString());
         nextButton.setEnabled(false);
     }
 
-    @OnClick(R.id.set_date_time_bt)
-    public void setDateTime() {
-        Timber.d("user about to set date and time");
+    @OnClick(R.id.set_next_date_time_bt)
+    public void setNextDateTime(){
+        Timber.d("user about to set next date and time");
         // Get Current Date
         final Calendar c = Calendar.getInstance();
         year = c.get(Calendar.YEAR);
@@ -115,7 +121,7 @@ public class SetDateTimeFragment extends Fragment implements SetDateTimeViewMode
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this.getContext(), (view, mYear, mMonth, mDay) -> {
-            dateResult.setText(mDay + "-" + (mMonth + 1) + "-" + mYear);
+            nextDateResult.setText(mDay + "-" + (mMonth + 1) + "-" + mYear);
             this.day = mDay;
             this.month = mMonth;
             this.year = mYear;
@@ -134,7 +140,7 @@ public class SetDateTimeFragment extends Fragment implements SetDateTimeViewMode
         TimePickerDialog timePickerDialog = new TimePickerDialog(
                 this.getContext(),
                 (view, hourOfDay, minute) -> {
-                    timeResult.setText(hourOfDay + ":" + minute);
+                    nextTimeResult.setText(hourOfDay + ":" + minute);
                     this.hour = hourOfDay;
                     this.minute = minute;
                     setResultsVisibleAndEnableNavigation();
@@ -143,15 +149,17 @@ public class SetDateTimeFragment extends Fragment implements SetDateTimeViewMode
     }
 
     private void setResultsVisibleAndEnableNavigation() {
-        dateTimeResultContainer.setVisibility(View.VISIBLE);
+        nextDateTimeResultContainer.setVisibility(View.VISIBLE);
         nextButton.setEnabled(true);
     }
 
-    @OnClick(R.id.date_time_next_bt)
+    @OnClick(R.id.next_date_time_next_bt)
     public void navigateForward() {
         Calendar calendar = CalendarUtils.assembleCalendar(year, month, day, hour, minute);
         dateTimeInMillis = calendar.getTimeInMillis();
-        maintenanceData.setTimestamp(dateTimeInMillis);
-        navigationListener.navigateToSetNextDateTimeFragment(maintenanceData);
+        maintenanceData.setNextTimestamp(dateTimeInMillis);
+        navigationListener.navigateToSetCommentFragment(maintenanceData);
     }
+
+
 }

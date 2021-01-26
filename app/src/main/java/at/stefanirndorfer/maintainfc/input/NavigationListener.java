@@ -4,16 +4,20 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Parcelable;
 
+import at.stefanirndorfer.maintainfc.model.MaintenanceData;
+
 public interface NavigationListener {
     void navigateToSetEmployeeIdFragment();
 
-    void navigateToSetDateTimeFragment(int employeeId);
+    void navigateToSetDateTimeFragment(MaintenanceData maintenanceData);
 
-    void navigateToSetCommentFragment(long dateTimeInMillis, int empId);
+    void navigateToSetNextDateTimeFragment(MaintenanceData maintenanceData);
+
+    void navigateToSetCommentFragment(MaintenanceData maintenanceData);
 
     void navigateToSummaryFragment(Bundle arguments);
 
-    void navigateToWriteToTagFragment(long dateTimeInMillis, int empId, String comment);
+    void navigateToWriteToTagFragment(MaintenanceData maintenanceData);
 
     void navigateToReadFromTagFragment();
 

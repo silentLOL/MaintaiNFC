@@ -1,7 +1,6 @@
 package at.stefanirndorfer.maintainfc.view;
 
 import android.content.Context;
-import android.nfc.FormatException;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,26 +16,21 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import at.stefanirndorfer.maintainfc.R;
 import at.stefanirndorfer.maintainfc.input.NavigationListener;
+import at.stefanirndorfer.maintainfc.model.MaintenanceData;
 import at.stefanirndorfer.maintainfc.viewmodel.WriteToTagViewModel;
 import timber.log.Timber;
 
 public class WriteToTagFragment extends Fragment implements WriteToTagViewModel.WriteToTagViewModelListener {
 
-    private static final String MILLIS_KEY = "MILLIS";
-    private static final String EMP_ID_KEY = "EMP_ID_KEY";
-    private static final String COMMENT_KEY = "COMMENT_KEY";
+    private static final String MAINT_DATA_KEY = "MAINT_DATA";
     private WriteToTagViewModel viewModel;
     private NavigationListener navigationListener;
-    private long millis;
-    private String comment;
-    private int empId;
+    private MaintenanceData maintenanceData;
 
-    public static WriteToTagFragment newInstance(long millis, int empId, String comment) {
+    public static WriteToTagFragment newInstance(MaintenanceData data) {
         WriteToTagFragment writeToTagFragment = new WriteToTagFragment();
         Bundle args = new Bundle();
-        args.putLong(MILLIS_KEY, millis);
-        args.putInt(EMP_ID_KEY, empId);
-        args.putString(COMMENT_KEY, comment);
+        args.putParcelable(MAINT_DATA_KEY, data);
         writeToTagFragment.setArguments(args);
         return writeToTagFragment;
     }
@@ -70,20 +64,18 @@ public class WriteToTagFragment extends Fragment implements WriteToTagViewModel.
     public void onResume() {
         super.onResume();
         Timber.d("onResume()");
-         millis = getArguments().getLong(MILLIS_KEY);
-         comment = getArguments().getString(COMMENT_KEY);
-         empId = getArguments().getInt(EMP_ID_KEY);
+        maintenanceData = getArguments().getParcelable(MAINT_DATA_KEY);
 
         try {
-            viewModel.write(millis,empId,comment,navigationListener.getTag());
-        } catch (IOException | FormatException e) {
+            viewModel.write(maintenanceData, navigationListener.getTag());
+        } catch (IOException e) {
             Timber.e(e);
         }
     }
 
     @Override
     public void successfullyWrittenToTag(boolean isSuccess) {
-        if (isSuccess){
+        if (isSuccess) {
             Timber.d("write success");
             navigationListener.navigateToSummaryFragment(getArguments());
         } else {

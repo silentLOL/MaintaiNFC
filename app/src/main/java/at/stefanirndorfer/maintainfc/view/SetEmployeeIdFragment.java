@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import at.stefanirndorfer.maintainfc.R;
 import at.stefanirndorfer.maintainfc.input.NavigationListener;
+import at.stefanirndorfer.maintainfc.model.MaintenanceData;
 import at.stefanirndorfer.maintainfc.viewmodel.SetEmployeeIdViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,7 +99,7 @@ public class SetEmployeeIdFragment extends Fragment implements SetEmployeeIdView
 
     @OnClick(R.id.employee_id_next_bt)
     public void navigateForward() {
-        navigationListener.navigateToSetDateTimeFragment(input);
+        navigationListener.navigateToSetDateTimeFragment(new MaintenanceData(input, null, null, null));
     }
 
 }

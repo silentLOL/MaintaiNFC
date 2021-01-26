@@ -1,6 +1,5 @@
 package at.stefanirndorfer.maintainfc.viewmodel;
 
-import android.nfc.FormatException;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.Tag;
@@ -13,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import androidx.lifecycle.ViewModel;
+import at.stefanirndorfer.maintainfc.model.MaintenanceData;
 import timber.log.Timber;
 
 import static at.stefanirndorfer.maintainfc.util.Constants.COMMENT_INDEX;
@@ -38,15 +38,15 @@ public class WriteToTagViewModel extends ViewModel {
      * - timestamp
      * - comment
      *
-     * @param timestamp
-     * @param employeeId
-     * @param comment
+     * @param data
      * @param tag
      * @throws IOException
-     * @throws FormatException
      */
-    public void write(long timestamp, int employeeId, String comment, Tag tag) throws IOException, FormatException {
-        long timeStampNext = timestamp + 20000; /*for testing purposes -- replace with real data*/
+    public void write(MaintenanceData data, Tag tag) throws IOException {
+        long timeStampNext = data.getNextTimestamp();
+        Integer employeeId = data.getEmployeeId();
+        Long timestamp = data.getTimestamp();
+        String comment = data.getComment();
         if (tag == null) {
             Timber.d("tag is null");
             return;

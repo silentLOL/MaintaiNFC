@@ -20,4 +20,6 @@
     <string name="comment_label">Comment:</string>
     <string name="summary_message">The following data have been successfully written to the device:</string>
     <string name="ok">Ok</string>
+    <string name="set_next_date_and_time_bt_label">Next maintenance</string>
+    <string name="next_date_and_time_label">Next Date and Time</string>
 </resources>

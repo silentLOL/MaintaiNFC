@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import at.stefanirndorfer.maintainfc.R;
 import at.stefanirndorfer.maintainfc.input.NavigationListener;
+import at.stefanirndorfer.maintainfc.model.MaintenanceData;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements NavigationListener {
@@ -159,9 +160,9 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     }
 
     @Override
-    public void navigateToSetDateTimeFragment(int employeeId) {
+    public void navigateToSetDateTimeFragment(MaintenanceData maintenanceData) {
         Timber.d("navigating to SetDateTimeFragment");
-        SetDateTimeFragment setDateTimeFragment = SetDateTimeFragment.newInstance(employeeId);
+        SetDateTimeFragment setDateTimeFragment = SetDateTimeFragment.newInstance(maintenanceData);
         fragmentManager.beginTransaction()
                 .replace(R.id.main_fragment_container, setDateTimeFragment, SetDateTimeFragment.class.getCanonicalName())
                 .addToBackStack(SetDateTimeFragment.class.getCanonicalName())
@@ -169,14 +170,25 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     }
 
     @Override
-    public void navigateToSetCommentFragment(long dateTimeInMillis, int empId) {
+    public void navigateToSetNextDateTimeFragment(MaintenanceData maintenanceData) {
+        Timber.d("navigating to SetDateTimeFragment");
+        SetNextDateTimeFragment setNextDateTimeFragment = SetNextDateTimeFragment.newInstance(maintenanceData);
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_fragment_container, setNextDateTimeFragment, SetNextDateTimeFragment.class.getCanonicalName())
+                .addToBackStack(SetNextDateTimeFragment.class.getCanonicalName())
+                .commit();
+    }
+
+    @Override
+    public void navigateToSetCommentFragment(MaintenanceData maintenanceData) {
         Timber.d("navigating to SetCommentFragment");
-        SetCommentFragment setCommentFragment = SetCommentFragment.newInstance(dateTimeInMillis, empId);
+        SetCommentFragment setCommentFragment = SetCommentFragment.newInstance(maintenanceData);
         fragmentManager.beginTransaction()
                 .replace(R.id.main_fragment_container, setCommentFragment, SetCommentFragment.class.getCanonicalName())
                 .addToBackStack(SetCommentFragment.class.getCanonicalName())
                 .commit();
     }
+
 
     @Override
     public void navigateToSummaryFragment(Bundle arguments) {
@@ -189,9 +201,9 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     }
 
     @Override
-    public void navigateToWriteToTagFragment(long dateTimeInMillis, int empId, String comment) {
+    public void navigateToWriteToTagFragment(MaintenanceData maintenanceData) {
         Timber.d("navigating to WriteToTagFragment");
-        WriteToTagFragment writeToTagFragment = WriteToTagFragment.newInstance(dateTimeInMillis, empId, comment);
+        WriteToTagFragment writeToTagFragment = WriteToTagFragment.newInstance(maintenanceData);
         fragmentManager.beginTransaction()
                 .replace(R.id.main_fragment_container, writeToTagFragment, WriteToTagFragment.class.getCanonicalName())
                 .addToBackStack(WriteToTagFragment.class.getCanonicalName())
