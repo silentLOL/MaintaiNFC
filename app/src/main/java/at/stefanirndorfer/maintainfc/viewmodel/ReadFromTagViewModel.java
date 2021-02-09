@@ -8,8 +8,10 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 import androidx.lifecycle.ViewModel;
+import at.stefanirndorfer.maintainfc.model.MaintenanceData;
 import timber.log.Timber;
 
+import static at.stefanirndorfer.maintainfc.util.Constants.COMMENT_INDEX;
 import static at.stefanirndorfer.maintainfc.util.Constants.EMPLOYEE_ID_SIZE;
 import static at.stefanirndorfer.maintainfc.util.Constants.OUR_HEADER_LENGTH;
 import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_SIZE;
@@ -49,6 +51,14 @@ public class ReadFromTagViewModel extends ViewModel {
         String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16"; // Get the Text Encoding
         int languageCodeLength = payload[0] & 0063; // Get the Language Code, e.g. "en"
         // String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
+
+        // check if the content is long enough
+        if (languageCodeLength + 1 + COMMENT_INDEX >= payload.length){
+            Timber.w("Tags content cannot be read");
+            // todo: show error message
+            return;
+        }
+
         int employeeIdOffset = languageCodeLength + 1 + OUR_HEADER_LENGTH;
         int timestampOffset = employeeIdOffset + EMPLOYEE_ID_SIZE;
         int timestampNextOffset = timestampOffset + TIMESTAMP_SIZE;
