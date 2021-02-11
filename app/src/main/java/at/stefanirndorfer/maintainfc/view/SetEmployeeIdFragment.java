@@ -30,9 +30,7 @@ public class SetEmployeeIdFragment extends BaseFragment {
 
     @Override
     View onCreateViewBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.set_employee_id_fragment, container, false);
-
-        SetEmployeeIdFragmentBinding binding = DataBindingUtil.setContentView(getActivity(), R.layout.set_employee_id_fragment);
+        SetEmployeeIdFragmentBinding binding= DataBindingUtil.inflate(inflater, R.layout.set_employee_id_fragment, container, false);
 
         SetEmployeeIdViewModel setEmployeeIdViewModel = new ViewModelProvider(this).get(SetEmployeeIdViewModel.class);
         binding.setViewModel(setEmployeeIdViewModel);
@@ -40,7 +38,7 @@ public class SetEmployeeIdFragment extends BaseFragment {
 
         setEmployeeIdViewModel.employeeId.observe(this, data -> {
             Timber.d("employeeId is set to: %s", data);
-            Integer input = 0;
+            int input = 0;
             if (!TextUtils.isEmpty(data)) {
                 input = Integer.parseInt(data);
             }
@@ -52,7 +50,13 @@ public class SetEmployeeIdFragment extends BaseFragment {
             navigateForward(new MaintenanceData(employeeId, null, null, null));
         });
 
-        return view;
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
     }
 
     @Override
