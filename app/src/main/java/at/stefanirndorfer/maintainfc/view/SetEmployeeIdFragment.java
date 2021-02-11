@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import at.stefanirndorfer.maintainfc.R;
 import at.stefanirndorfer.maintainfc.databinding.SetEmployeeIdFragmentBinding;
 import at.stefanirndorfer.maintainfc.model.MaintenanceData;
+import at.stefanirndorfer.maintainfc.viewmodel.ResultsViewModel;
 import at.stefanirndorfer.maintainfc.viewmodel.SetEmployeeIdViewModel;
 import timber.log.Timber;
 
@@ -31,11 +32,13 @@ public class SetEmployeeIdFragment extends BaseFragment {
 
     @Override
     void onCreateSetupViewModel(ViewDataBinding binding) {
-        SetEmployeeIdViewModel setEmployeeIdViewModel = new ViewModelProvider(this).get(SetEmployeeIdViewModel.class);
+        SetEmployeeIdViewModel setEmployeeIdViewModel = new ViewModelProvider(requireActivity()).get(SetEmployeeIdViewModel.class);
         ((SetEmployeeIdFragmentBinding) binding).setViewModel(setEmployeeIdViewModel);
 
         setEmployeeIdViewModel.employeeId.observe(this, data -> {
             Timber.d("employeeId is set to: %s", data);
+            ResultsViewModel model = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
+            model.employeeId.postValue(data);
             int input = 0;
             if (!TextUtils.isEmpty(data)) {
                 input = Integer.parseInt(data);

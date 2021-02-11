@@ -11,7 +11,6 @@ public class SetEmployeeIdViewModel extends ViewModel {
     public MutableLiveData<Integer> nextButtonPressed = new MutableLiveData<>();
 
     public SetEmployeeIdViewModel() {
-        employeeId = new MutableLiveData<>();
     }
 
 

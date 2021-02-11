@@ -12,11 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import at.stefanirndorfer.maintainfc.input.NavigationListener;
+import at.stefanirndorfer.maintainfc.viewmodel.ResultsViewModel;
 import timber.log.Timber;
 
 public abstract class BaseFragment extends Fragment {
     protected NavigationListener navigationListener;
+    protected ResultsViewModel resultsViewModel;
 
 
     /////////////////////////////////////////
@@ -54,6 +57,7 @@ public abstract class BaseFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Timber.d("onStart");
+        resultsViewModel = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
     }
 
     @Override
