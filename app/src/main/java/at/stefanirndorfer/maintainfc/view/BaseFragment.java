@@ -41,6 +41,7 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setShowHomeButton();
         setNFCReadingAllowed();
+        setResultsFragmentVisibility();
         ViewDataBinding viewDataBinding = onCreateViewBinding(inflater, container, savedInstanceState);
         viewDataBinding.setLifecycleOwner(this);
         onCreateSetupViewModel(viewDataBinding);
@@ -83,5 +84,7 @@ public abstract class BaseFragment extends Fragment {
     abstract void setNFCReadingAllowed();
 
     abstract void setShowHomeButton();
+
+    abstract void setResultsFragmentVisibility();
 
 }

@@ -41,6 +41,7 @@ public class MainScreenFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         navigationListener.hideHomeButton();
         navigationListener.isNFCReadingAllowed(true); /* we want to read while in foreground */
+        navigationListener.setResultsFragmentVisibility(View.GONE);
         View view = inflater.inflate(R.layout.main_screen_fragment, container, false);
         ButterKnife.bind(this, view);
         return view;
@@ -64,15 +65,17 @@ public class MainScreenFragment extends Fragment {
     }
 
     @OnClick(R.id.read_tag_bt)
-    void navigateToReadFragment(){
+    void navigateToReadFragment() {
         navigationListener.navigateToReadFromTagFragment();
     }
+
     @OnClick(R.id.start_write_flow_bt)
-    void navigateToWriteToTagFragment(){
+    void navigateToWriteToTagFragment() {
         navigationListener.navigateToSetEmployeeIdFragment();
     }
+
     @OnClick(R.id.format_tag_bt)
-    void navigateToFormatTagFragment(){
+    void navigateToFormatTagFragment() {
         navigationListener.navigateToFormatTagFragment();
     }
 

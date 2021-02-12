@@ -264,6 +264,11 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     }
 
     @Override
+    public void setResultsFragmentVisibility(int visibility) {
+        findViewById(R.id.result_fragment).setVisibility(visibility);
+    }
+
+    @Override
     public void isNFCReadingAllowed(boolean isNFCReadingAllowed) {
         this.isNFCReadingAllowed = isNFCReadingAllowed;
     }

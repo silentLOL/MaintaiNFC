@@ -68,6 +68,10 @@ public class SetEmployeeIdFragment extends BaseFragment {
         navigationListener.showHomeButton();
     }
 
+    @Override
+    void setResultsFragmentVisibility() {
+        navigationListener.setResultsFragmentVisibility(View.VISIBLE);
+    }
 
 
     public void navigateForward(MaintenanceData data) {
