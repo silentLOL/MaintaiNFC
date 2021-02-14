@@ -9,9 +9,9 @@ import at.stefanirndorfer.maintainfc.model.MaintenanceData;
 public interface NavigationListener {
     void navigateToSetEmployeeIdFragment();
 
-    void navigateToSetDateTimeFragment(MaintenanceData maintenanceData);
+    void navigateToSetDateTimeFragment();
 
-    void navigateToSetNextDateTimeFragment(MaintenanceData maintenanceData);
+    void navigateToSetNextDateTimeFragment();
 
     void navigateToSetCommentFragment(MaintenanceData maintenanceData);
 

@@ -13,7 +13,7 @@ import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.ViewModelProvider;
 import at.stefanirndorfer.maintainfc.R;
 import at.stefanirndorfer.maintainfc.databinding.SetEmployeeIdFragmentBinding;
-import at.stefanirndorfer.maintainfc.model.MaintenanceData;
+import at.stefanirndorfer.maintainfc.model.EmployeeIdEvaluation;
 import at.stefanirndorfer.maintainfc.viewmodel.ResultsViewModel;
 import at.stefanirndorfer.maintainfc.viewmodel.SetEmployeeIdViewModel;
 import timber.log.Timber;
@@ -39,23 +39,17 @@ public class SetEmployeeIdFragment extends BaseFragment {
             Timber.d("employeeId is set to: %s", data);
             ResultsViewModel model = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
             model.employeeId.setValue(data);
-            Integer input = null;
-            if (!TextUtils.isEmpty(data)) {
-                input = Integer.parseInt(data);
+            if (model.validateEmployeeIdInput() == EmployeeIdEvaluation.OK){
+                setEmployeeIdViewModel.isNextButtonAvailable.setValue(true);
             }
-            setEmployeeIdViewModel.onEmployeeIdInputReceived(input);
         });
 
         setEmployeeIdViewModel.nextButtonPressed.observe(this, employeeId -> {
             Timber.d("next button is pressed, moving forward with employeeId: %s", employeeId);
-            navigateForward(new MaintenanceData(employeeId, null, null, null));
+            navigateForward();
         });
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
 
     @Override
     void setNFCReadingAllowed() {
@@ -74,8 +68,8 @@ public class SetEmployeeIdFragment extends BaseFragment {
     }
 
 
-    public void navigateForward(MaintenanceData data) {
-        navigationListener.navigateToSetDateTimeFragment(data);
+    public void navigateForward() {
+        navigationListener.navigateToSetDateTimeFragment();
     }
 
 }

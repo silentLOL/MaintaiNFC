@@ -65,12 +65,8 @@ public class SetNextDateTimeFragment extends Fragment implements SetNextDateTime
     private int minute;
     private MaintenanceData maintenanceData;
 
-    public static SetNextDateTimeFragment newInstance(MaintenanceData maintenanceData) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(MAINTENANCE_DATA_KEY, maintenanceData);
-        SetNextDateTimeFragment setNextDateTimeFragment = new SetNextDateTimeFragment();
-        setNextDateTimeFragment.setArguments(bundle);
-        return setNextDateTimeFragment;
+    public static SetNextDateTimeFragment newInstance() {
+       return new SetNextDateTimeFragment();
     }
 
     @Override

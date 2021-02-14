@@ -13,21 +13,8 @@ public class SetEmployeeIdViewModel extends ViewModel {
     public SetEmployeeIdViewModel() {
     }
 
-
-    public void onEmployeeIdInputReceived(Integer employeeId) {
-        if (employeeId != null) {
-            Timber.d("enabling next button");
-            isNextButtonAvailable.setValue(true);
-        } else {
-            Timber.d("disabling next button");
-            isNextButtonAvailable.setValue(false);
-        }
-    }
-
     public void onNextButtonClicked() {
         Timber.d("on next button click");
-        if (employeeId.getValue() != null && Integer.parseInt(employeeId.getValue()) > 0) {
-            nextButtonPressed.setValue(Integer.parseInt(employeeId.getValue()));
-        }
+        nextButtonPressed.setValue(Integer.parseInt(employeeId.getValue()));
     }
 }

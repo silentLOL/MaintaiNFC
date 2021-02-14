@@ -1,5 +1,7 @@
 package at.stefanirndorfer.maintainfc.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -12,5 +14,11 @@ public class CalendarUtils {
         c.set(year, month, day, hour, minute);
         Timber.d("calender is set to: " + new Date(c.getTimeInMillis()).toString());
         return c;
+    }
+
+    public static String getPrintableCalendar(Calendar c) {
+        Date date = c.getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        return dateFormat.format(date);
     }
 }

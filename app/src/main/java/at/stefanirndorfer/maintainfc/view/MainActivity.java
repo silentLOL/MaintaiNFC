@@ -161,9 +161,9 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     }
 
     @Override
-    public void navigateToSetDateTimeFragment(MaintenanceData maintenanceData) {
+    public void navigateToSetDateTimeFragment() {
         Timber.d("navigating to SetDateTimeFragment");
-        SetDateTimeFragment setDateTimeFragment = SetDateTimeFragment.newInstance(maintenanceData);
+        SetDateTimeFragment setDateTimeFragment = SetDateTimeFragment.newInstance();
         fragmentManager.beginTransaction()
                 .replace(R.id.main_fragment_container, setDateTimeFragment, SetDateTimeFragment.class.getCanonicalName())
                 .addToBackStack(SetDateTimeFragment.class.getCanonicalName())
@@ -171,9 +171,9 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     }
 
     @Override
-    public void navigateToSetNextDateTimeFragment(MaintenanceData maintenanceData) {
+    public void navigateToSetNextDateTimeFragment() {
         Timber.d("navigating to SetDateTimeFragment");
-        SetNextDateTimeFragment setNextDateTimeFragment = SetNextDateTimeFragment.newInstance(maintenanceData);
+        SetNextDateTimeFragment setNextDateTimeFragment = SetNextDateTimeFragment.newInstance();
         fragmentManager.beginTransaction()
                 .replace(R.id.main_fragment_container, setNextDateTimeFragment, SetNextDateTimeFragment.class.getCanonicalName())
                 .addToBackStack(SetNextDateTimeFragment.class.getCanonicalName())
