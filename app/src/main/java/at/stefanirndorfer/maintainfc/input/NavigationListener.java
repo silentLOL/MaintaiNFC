@@ -36,9 +36,10 @@ public interface NavigationListener {
     void isNFCReadingAllowed(boolean isNFCReadingAllowed);
 
     /**
-     * dodo move to a sedicated interface class -- does not fit here
+     * todo move to a dedicated interface class -- does not fit here
+     *
      * @return
      */
-    Tag getTag();
+    Tag getNFCTag();
 
 }

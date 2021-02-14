@@ -55,7 +55,6 @@ public class SetEmployeeIdFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override
@@ -65,6 +64,7 @@ public class SetEmployeeIdFragment extends BaseFragment {
 
     @Override
     void setShowHomeButton() {
+        Timber.d("%s is showing home button", this);
         navigationListener.showHomeButton();
     }
 

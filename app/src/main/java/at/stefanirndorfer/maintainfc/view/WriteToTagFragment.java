@@ -67,7 +67,7 @@ public class WriteToTagFragment extends Fragment implements WriteToTagViewModel.
         maintenanceData = getArguments().getParcelable(MAINT_DATA_KEY);
 
         try {
-            viewModel.write(maintenanceData, navigationListener.getTag());
+            viewModel.write(maintenanceData, navigationListener.getNFCTag());
         } catch (IOException e) {
             Timber.e(e);
         }

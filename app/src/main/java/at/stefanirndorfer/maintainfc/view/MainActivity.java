@@ -137,10 +137,11 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
+        if (getSupportFragmentManager().getBackStackEntryCount() < 1) {
             super.onBackPressed();
         } else {
             getSupportFragmentManager().popBackStack();
+            Timber.d("popping FragmentBackStack. Size: %s", getSupportFragmentManager().getFragments().size());
         }
     }
 
@@ -274,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     }
 
     @Override
-    public Tag getTag() {
+    public Tag getNFCTag() {
         return myTag;
     }
 
