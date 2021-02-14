@@ -38,8 +38,8 @@ public class SetEmployeeIdFragment extends BaseFragment {
         setEmployeeIdViewModel.employeeId.observe(this, data -> {
             Timber.d("employeeId is set to: %s", data);
             ResultsViewModel model = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
-            model.employeeId.postValue(data);
-            int input = 0;
+            model.employeeId.setValue(data);
+            Integer input = null;
             if (!TextUtils.isEmpty(data)) {
                 input = Integer.parseInt(data);
             }
