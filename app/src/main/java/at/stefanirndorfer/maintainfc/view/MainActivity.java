@@ -181,9 +181,9 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     }
 
     @Override
-    public void navigateToSetCommentFragment(MaintenanceData maintenanceData) {
+    public void navigateToSetCommentFragment() {
         Timber.d("navigating to SetCommentFragment");
-        SetCommentFragment setCommentFragment = SetCommentFragment.newInstance(maintenanceData);
+        SetCommentFragment setCommentFragment = SetCommentFragment.newInstance();
         fragmentManager.beginTransaction()
                 .replace(R.id.main_fragment_container, setCommentFragment, SetCommentFragment.class.getCanonicalName())
                 .addToBackStack(SetCommentFragment.class.getCanonicalName())

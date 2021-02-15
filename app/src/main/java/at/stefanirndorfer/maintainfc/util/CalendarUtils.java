@@ -12,13 +12,13 @@ public class CalendarUtils {
         Calendar c = Calendar.getInstance();
         c.clear();
         c.set(year, month, day, hour, minute);
-        Timber.d("calender is set to: " + new Date(c.getTimeInMillis()).toString());
+        Timber.d("calender is set to: %s", new Date(c.getTimeInMillis()).toString());
         return c;
     }
 
     public static String getPrintableCalendar(Calendar c) {
         Date date = c.getTime();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         return dateFormat.format(date);
     }
 }

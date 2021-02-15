@@ -13,7 +13,7 @@ public interface NavigationListener {
 
     void navigateToSetNextDateTimeFragment();
 
-    void navigateToSetCommentFragment(MaintenanceData maintenanceData);
+    void navigateToSetCommentFragment();
 
     void navigateToSummaryFragment(Bundle arguments);
 

@@ -53,12 +53,8 @@ public class SetCommentFragment extends Fragment {
     private String comment;
     private MaintenanceData maintenanceData;
 
-    public static SetCommentFragment newInstance(MaintenanceData maintenanceData) {
-        SetCommentFragment setCommentFragment = new SetCommentFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(MAINTENANCE_DATA_KEY, maintenanceData);
-        setCommentFragment.setArguments(args);
-        return setCommentFragment;
+    public static SetCommentFragment newInstance() {
+        return new SetCommentFragment();
     }
 
     @Override
