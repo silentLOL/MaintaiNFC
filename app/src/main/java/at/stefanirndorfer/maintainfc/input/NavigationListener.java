@@ -17,7 +17,7 @@ public interface NavigationListener {
 
     void navigateToSummaryFragment(Bundle arguments);
 
-    void navigateToWriteToTagFragment(MaintenanceData maintenanceData);
+    void navigateToWriteToTagFragment();
 
     void navigateToReadFromTagFragment();
 

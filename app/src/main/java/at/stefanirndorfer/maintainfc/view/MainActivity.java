@@ -202,9 +202,9 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     }
 
     @Override
-    public void navigateToWriteToTagFragment(MaintenanceData maintenanceData) {
+    public void navigateToWriteToTagFragment() {
         Timber.d("navigating to WriteToTagFragment");
-        WriteToTagFragment writeToTagFragment = WriteToTagFragment.newInstance(maintenanceData);
+        WriteToTagFragment writeToTagFragment = WriteToTagFragment.newInstance();
         fragmentManager.beginTransaction()
                 .replace(R.id.main_fragment_container, writeToTagFragment, WriteToTagFragment.class.getCanonicalName())
                 .addToBackStack(WriteToTagFragment.class.getCanonicalName())

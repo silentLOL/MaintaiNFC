@@ -27,12 +27,8 @@ public class WriteToTagFragment extends Fragment implements WriteToTagViewModel.
     private NavigationListener navigationListener;
     private MaintenanceData maintenanceData;
 
-    public static WriteToTagFragment newInstance(MaintenanceData data) {
-        WriteToTagFragment writeToTagFragment = new WriteToTagFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(MAINT_DATA_KEY, data);
-        writeToTagFragment.setArguments(args);
-        return writeToTagFragment;
+    public static WriteToTagFragment newInstance() {
+        return new WriteToTagFragment();
     }
 
     @Override

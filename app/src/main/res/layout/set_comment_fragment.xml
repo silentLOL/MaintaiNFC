@@ -1,79 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout>
+
+  <data>
+    <variable
+      name="viewModel"
+      type="at.stefanirndorfer.maintainfc.viewmodel.SetCommentViewModel" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.SetCommentFragment">
 
+
     <LinearLayout
-        android:id="@+id/results_ll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:textAlignment="center"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/emp_id_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/employee_id_label" />
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/comment_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="@string/comment_et_hint"
+          app:errorEnabled="true"
+          android:lines="3">
 
-        <TextView
-            android:id="@+id/employee_id_result"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/date_and_time_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/date_and_time_label" />
-
-        <TextView
-            android:id="@+id/date_and_time_result"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/next_date_and_time_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/next_date_and_time_label" />
-
-        <TextView
-            android:id="@+id/next_date_and_time_result"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/add_comment_label"
-            android:layout_margin="@dimen/margin_button"
-            android:layout_marginTop="@dimen/margin_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_comment_label" />
-
-        <EditText
-            android:id="@+id/add_comment_tv"
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/your_comment_hint"/>
+            android:text="@={viewModel.comment}"
+            android:layout_height="match_parent" />
+
+      </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/comment_next_bt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_button"
-        android:layout_marginBottom="@dimen/margin_button"
-        android:text="@string/next"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+      android:id="@+id/comment_next_bt"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="@dimen/margin_button"
+      android:layout_marginBottom="@dimen/margin_button"
+      android:enabled="@{viewModel.isNextButtonAvailable}"
+      android:onClick="@{()-> viewModel.onNextButtonClicked()}"
+      android:text="@string/next"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

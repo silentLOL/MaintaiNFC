@@ -23,4 +23,5 @@
     <string name="set_next_date_and_time_bt_label">Next maintenance</string>
     <string name="next_date_and_time_label">Next Date and Time</string>
     <string name="input_your_employee_id_label">Enter your Id:</string>
+    <string name="comment_error_too_long">Your comment is too long</string>
 </resources>

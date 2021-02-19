@@ -12,4 +12,8 @@ public class Constants {
     public static final int TIMESTAMP_THIS_INDEX = OUR_HEADER_LENGTH + EMPLOYEE_ID_SIZE;
     public static final int TIMESTAMP_NEXT_INDEX = TIMESTAMP_THIS_INDEX + TIMESTAMP_SIZE;
     public static final int COMMENT_INDEX = TIMESTAMP_NEXT_INDEX + TIMESTAMP_SIZE;
+
+
+    // validation constants
+    public static final int MAX_COMMENT_LENGTH = 200; // todo: Find out how long it actually can be. This is just a made up number
 }
