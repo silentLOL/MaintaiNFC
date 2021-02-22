@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 import at.stefanirndorfer.maintainfc.model.CommentEvaluation;
 import at.stefanirndorfer.maintainfc.model.DateTimeEvaluation;
 import at.stefanirndorfer.maintainfc.model.EmployeeIdEvaluation;
+import at.stefanirndorfer.maintainfc.model.MaintenanceData;
 import at.stefanirndorfer.maintainfc.model.NextDateTimeEvaluation;
 import at.stefanirndorfer.maintainfc.util.CalendarUtils;
 import at.stefanirndorfer.maintainfc.util.Constants;
@@ -41,6 +42,33 @@ public class ResultsViewModel extends ViewModel {
     public void setNextDateAndTimeCalendar(Calendar calendar) {
         nextDateAndTime.setValue(CalendarUtils.getPrintableCalendar(calendar));
         this.nextDateAndTimeCalendar.setValue(calendar);
+    }
+
+    /**
+     * wraps the data into a MaintenanceData object
+     *
+     * @returns the object of null if a mandatory field is missing
+     */
+    public MaintenanceData getMaintenanceData() {
+        if (!isDataComplete()) {
+            Timber.d("The required data are not given");
+            return null;
+        }
+        return new MaintenanceData(Integer.valueOf(employeeId.getValue()),
+                                   dateAndTimeCalendar.getValue().getTimeInMillis(),
+                                   nextDateAndTimeCalendar.getValue().getTimeInMillis(),
+                                   comment.getValue());
+    }
+
+    /**
+     * comment is not checked since it's not a mandatory field
+     *
+     * @return true if data are complete
+     */
+    private boolean isDataComplete() {
+        return employeeId.getValue() != null
+               && dateAndTimeCalendar.getValue() != null
+               && nextDateAndTimeCalendar.getValue() != null;
     }
 
 

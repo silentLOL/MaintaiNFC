@@ -16,6 +16,6 @@ public class SetCommentViewModel extends ViewModel {
 
   public void onNextButtonClicked() {
     Timber.d("on next button click");
-    nextButtonPressed.setValue(Integer.parseInt(comment.getValue()));
+    nextButtonPressed.setValue(1);
   }
 }

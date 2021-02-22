@@ -15,7 +15,7 @@ public interface NavigationListener {
 
     void navigateToSetCommentFragment();
 
-    void navigateToSummaryFragment(Bundle arguments);
+    void navigateToSummaryFragment();
 
     void navigateToWriteToTagFragment();
 

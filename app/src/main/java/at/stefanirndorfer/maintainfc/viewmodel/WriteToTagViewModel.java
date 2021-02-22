@@ -13,6 +13,8 @@ import java.util.Arrays;
 
 import androidx.lifecycle.ViewModel;
 import at.stefanirndorfer.maintainfc.model.MaintenanceData;
+import at.stefanirndorfer.maintainfc.model.SingleLiveEvent;
+import at.stefanirndorfer.maintainfc.model.WriteToTagResult;
 import timber.log.Timber;
 
 import static at.stefanirndorfer.maintainfc.util.Constants.COMMENT_INDEX;
@@ -24,11 +26,9 @@ import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_SIZE;
 import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_THIS_INDEX;
 
 public class WriteToTagViewModel extends ViewModel {
+    public SingleLiveEvent<WriteToTagResult> writingResult = new SingleLiveEvent<>();
 
-    private WriteToTagViewModelListener listener;
-
-    public void setListener(WriteToTagViewModelListener listener) {
-        this.listener = listener;
+    public WriteToTagViewModel() {
     }
 
     /**
@@ -92,11 +92,11 @@ public class WriteToTagViewModel extends ViewModel {
             ndef.writeNdefMessage(message);
             // Close the connection
             ndef.close();
-            listener.successfullyWrittenToTag(true);
+            writingResult.setValue(WriteToTagResult.SUCCESS);
         } catch (Exception e) {
             Timber.d("error writing connecting");
             Timber.e(e);
-            listener.successfullyWrittenToTag(false);
+            writingResult.setValue(WriteToTagResult.FAIL);
         }
     }
 
@@ -137,8 +137,4 @@ public class WriteToTagViewModel extends ViewModel {
         return crc_value;
     }
 
-
-    public interface WriteToTagViewModelListener {
-        void successfullyWrittenToTag(boolean isSuccess);
-    }
 }

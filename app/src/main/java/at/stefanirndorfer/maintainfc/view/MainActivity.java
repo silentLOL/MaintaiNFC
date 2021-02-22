@@ -192,9 +192,9 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
 
     @Override
-    public void navigateToSummaryFragment(Bundle arguments) {
+    public void navigateToSummaryFragment() {
         Timber.d("navigating to SummaryFragment");
-        SummaryFragment summaryFragment = SummaryFragment.newInstance(arguments);
+        SummaryFragment summaryFragment = SummaryFragment.newInstance();
         fragmentManager.beginTransaction()
                 .replace(R.id.main_fragment_container, summaryFragment, SummaryFragment.class.getCanonicalName())
                 .addToBackStack(SummaryFragment.class.getCanonicalName())
