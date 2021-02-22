@@ -12,6 +12,7 @@ import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.ViewModelProvider;
 import at.stefanirndorfer.maintainfc.R;
 import at.stefanirndorfer.maintainfc.databinding.SummaryFragmentBinding;
+import at.stefanirndorfer.maintainfc.viewmodel.ResultsViewModel;
 import timber.log.Timber;
 
 public class SummaryFragment extends BaseFragment {
@@ -59,6 +60,9 @@ public class SummaryFragment extends BaseFragment {
     }
 
     public void navigateForward() {
+        ResultsViewModel resultsViewModel = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
+        resultsViewModel.clearData();
+
         navigationListener.navigateToMain();
     }
 

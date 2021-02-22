@@ -119,4 +119,16 @@ public class ResultsViewModel extends ViewModel {
         }
         return CommentEvaluation.OK;
     }
+
+    /**
+     * this deletes all the data
+     */
+    public void clearData() {
+        employeeId.setValue("");
+        dateAndTime.setValue("");
+        nextDateAndTime.setValue("");
+        comment.setValue("");
+        dateAndTimeCalendar.setValue(null);
+        nextDateAndTimeCalendar.setValue(null);
+    }
 }
