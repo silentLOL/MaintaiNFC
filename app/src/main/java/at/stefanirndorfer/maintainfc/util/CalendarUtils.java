@@ -16,6 +16,12 @@ public class CalendarUtils {
         return c;
     }
 
+    public static String getStringFromMillis(Long timestamp){
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(timestamp);
+        return getPrintableCalendar(c);
+    }
+
     public static String getPrintableCalendar(Calendar c) {
         Date date = c.getTime();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");

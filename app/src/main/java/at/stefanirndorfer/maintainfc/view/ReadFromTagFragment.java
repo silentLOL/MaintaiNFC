@@ -1,41 +1,29 @@
 package at.stefanirndorfer.maintainfc.view;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Calendar;
-import java.util.Date;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.ViewModelProvider;
 import at.stefanirndorfer.maintainfc.R;
-import at.stefanirndorfer.maintainfc.input.NavigationListener;
+import at.stefanirndorfer.maintainfc.databinding.ReadFromTagFragmentBinding;
+import at.stefanirndorfer.maintainfc.model.ReadFromTagResult;
 import at.stefanirndorfer.maintainfc.viewmodel.ReadFromTagViewModel;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import at.stefanirndorfer.maintainfc.viewmodel.ResultsViewModel;
 import timber.log.Timber;
 
-public class ReadFromTagFragment extends Fragment implements ReadFromTagViewModel.ReadFromTagFragmentViewModelListener {
+import static android.widget.Toast.LENGTH_LONG;
+
+public class ReadFromTagFragment extends BaseFragment {
 
     public static final String RAW_MESSAGE_KEY = "RAW_MESSAGE_KEY";
-    private ReadFromTagViewModel viewModel;
-    private NavigationListener navigationListener;
-    private Parcelable[] rawMessage;
-    @BindView
-            (R.id.nfc_content_tv)
-    TextView nfcContentOutput;
-    @BindView
-            (R.id.approach_nfc_tag_msg_tv)
-    TextView approachNFCTagMsg;
 
     public static ReadFromTagFragment newInstance(Parcelable[] rawMessage) {
         ReadFromTagFragment fragment = new ReadFromTagFragment();
@@ -46,104 +34,72 @@ public class ReadFromTagFragment extends Fragment implements ReadFromTagViewMode
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        Timber.d("onCreateView");
-        navigationListener.showHomeButton();
-        navigationListener.isNFCReadingAllowed(true); /* we want to read while in foreground */
-        if (getArguments().getParcelableArray(RAW_MESSAGE_KEY) != null) {
-            Timber.d("setting rawMessage from arguments");
-            rawMessage = getArguments().getParcelableArray(RAW_MESSAGE_KEY);
-        }
-        View view = inflater.inflate(R.layout.read_from_tag_fragment, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+    ViewDataBinding onCreateViewBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return DataBindingUtil.inflate(inflater, R.layout.read_from_tag_fragment, container, false);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(ReadFromTagViewModel.class);
+    void onCreateSetupViewModel(ViewDataBinding binding) {
+        ReadFromTagViewModel readFromTagViewModel = new ViewModelProvider(requireActivity()).get(ReadFromTagViewModel.class);
+        ((ReadFromTagFragmentBinding) binding).setViewModel(readFromTagViewModel);
+        showDataFromArgsIfGiven(readFromTagViewModel);
+
+        ResultsViewModel model = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
+
+        // indicates the outcome of the reading operation
+        readFromTagViewModel.readingResult.observe(this, data -> {
+            if (data.equals(ReadFromTagResult.FAIL)) {
+                Toast.makeText(this.getContext(), R.string.failed_to_read_tag_msg, LENGTH_LONG).show();
+                readFromTagViewModel.isNextButtonAvailable.setValue(false);
+            }
+            if (data.equals(ReadFromTagResult.SUCCESS)) {
+                readFromTagViewModel.isNextButtonAvailable.setValue(true);
+            }
+        });
+
+        readFromTagViewModel.resultData.observe(this, maintenanceData -> {
+            Timber.d("received maintenance data");
+            model.setMaintenanceData(maintenanceData);
+            navigationListener.setResultsFragmentVisibility(View.VISIBLE);
+        });
+
+        readFromTagViewModel.okButtonClicked.observe(this, clicked -> {
+            Timber.d("Forward navigation clicked");
+            model.clearData();
+            navigationListener.navigateToMain();
+        });
     }
 
-    @Override
-    public void onAttach(@NotNull Context context) {
-        super.onAttach(context);
-        try {
-            navigationListener = (NavigationListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement NavigationListener");
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Timber.d("onResume");
-        viewModel.setListener(this);
-        approachNFCTagMsg.setVisibility(View.VISIBLE);
-        if (rawMessage != null) {
-            getTranslationFromViewModel();
-        } else {
+    private void showDataFromArgsIfGiven(ReadFromTagViewModel readFromTagViewModel) {
+        if (getArguments().getParcelableArray(RAW_MESSAGE_KEY) == null) {
             Timber.d("no rawMessage set yet");
+            return;
         }
+        getTranslationFromViewModel(getArguments().getParcelableArray(RAW_MESSAGE_KEY), readFromTagViewModel);
     }
 
-    private void getTranslationFromViewModel() {
+    private void getTranslationFromViewModel(Parcelable[] rawMessage, ReadFromTagViewModel readFromTagViewModel) {
         Timber.d("setting rawMessage to viewModel");
-        approachNFCTagMsg.setVisibility(View.GONE);
-        viewModel.processNewMessage(rawMessage);
+        readFromTagViewModel.processNewMessage(rawMessage);
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        Timber.d("onPause");
+    void setNFCReadingAllowed() {
+        navigationListener.isNFCReadingAllowed(true); /* we want to read while in foreground */
+    }
+
+    @Override
+    void setShowHomeButton() {
+        navigationListener.showHomeButton();
+    }
+
+    @Override
+    void setResultsFragmentVisibility() {
+        navigationListener.setResultsFragmentVisibility(View.GONE);
     }
 
     public void setRawMessage(Parcelable[] rawMessage) {
-        this.rawMessage = rawMessage;
-        getTranslationFromViewModel();
-    }
-
-    private void setNFCContentText(String nfcContent) {
-        nfcContentOutput.setText(nfcContent);
-    }
-
-    /////////////////////////////////////////////////////
-    // viewModel Listener
-    /////////////////////////////////////////////////////
-
-    @Override
-    public void setSetTagContentToTextOutput(int redEmployeeId, long redTimeStamp, long redTimeStampNext, String redComment) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(redTimeStamp);
-        Date date = new Date(redTimeStamp);
-        Date dateNext = new Date(redTimeStampNext);
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n");
-        sb.append(this.getString(R.string.employee_id_label));
-        sb.append("\n");
-        sb.append(redEmployeeId);
-        sb.append("\n");
-        sb.append("\n");
-        sb.append(this.getString(R.string.pick_date_button_label));
-        sb.append(" + ");
-        sb.append(this.getString(R.string.pick_time_button_label));
-        sb.append(":\n");
-        sb.append(date.toString());
-        sb.append("\n");
-        sb.append("\n");
-        sb.append(this.getString(R.string.pick_date_button_label));
-        sb.append(" + ");
-        sb.append(this.getString(R.string.pick_time_button_label));
-        sb.append(":\n");
-        sb.append(dateNext.toString());
-        sb.append("\n");
-        sb.append("\n");
-        sb.append(this.getString(R.string.comment_et_hint));
-        sb.append(":\n");
-        sb.append(redComment);
-        setNFCContentText(sb.toString());
+        ReadFromTagViewModel readFromTagViewModel = new ViewModelProvider(requireActivity()).get(ReadFromTagViewModel.class);
+        getTranslationFromViewModel(rawMessage, readFromTagViewModel);
     }
 }

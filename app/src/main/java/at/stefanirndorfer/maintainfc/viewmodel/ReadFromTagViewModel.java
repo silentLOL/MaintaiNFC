@@ -1,6 +1,5 @@
 package at.stefanirndorfer.maintainfc.viewmodel;
 
-import android.content.Context;
 import android.nfc.NdefMessage;
 import android.os.Parcelable;
 
@@ -9,6 +8,8 @@ import java.nio.ByteBuffer;
 
 import androidx.lifecycle.ViewModel;
 import at.stefanirndorfer.maintainfc.model.MaintenanceData;
+import at.stefanirndorfer.maintainfc.model.ReadFromTagResult;
+import at.stefanirndorfer.maintainfc.model.SingleLiveEvent;
 import timber.log.Timber;
 
 import static at.stefanirndorfer.maintainfc.util.Constants.COMMENT_INDEX;
@@ -18,7 +19,10 @@ import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_SIZE;
 
 public class ReadFromTagViewModel extends ViewModel {
 
-    private ReadFromTagFragmentViewModelListener listener;
+    public SingleLiveEvent<MaintenanceData> resultData = new SingleLiveEvent<>();
+    public SingleLiveEvent<ReadFromTagResult> readingResult = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> isNextButtonAvailable = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> okButtonClicked = new SingleLiveEvent<>();
 
     public ReadFromTagViewModel() {
         super();
@@ -53,9 +57,9 @@ public class ReadFromTagViewModel extends ViewModel {
         // String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
 
         // check if the content is long enough
-        if (languageCodeLength + 1 + COMMENT_INDEX >= payload.length){
+        if (languageCodeLength + 1 + COMMENT_INDEX >= payload.length) {
             Timber.w("Tags content cannot be read");
-            // todo: show error message
+            readingResult.setValue(ReadFromTagResult.FAIL);
             return;
         }
 
@@ -88,18 +92,16 @@ public class ReadFromTagViewModel extends ViewModel {
             Timber.d("the comment red from the tag is: " + redComment);
         } catch (UnsupportedEncodingException e) {
             Timber.e(e);
+            readingResult.setValue(ReadFromTagResult.FAIL);
+            return;
         }
-        Timber.d("setting text to the output view");
-        listener.setSetTagContentToTextOutput(redEmployeeId, redTimeStamp, redTimeStampNext, redComment);
+        // todo: refactor
+        readingResult.setValue(ReadFromTagResult.SUCCESS);
+        resultData.setValue(new MaintenanceData(redEmployeeId, redTimeStamp, redTimeStampNext, redComment));
     }
 
-    public void setListener(ReadFromTagFragmentViewModelListener readFromTagFragmentViewModelListener) {
-        this.listener = readFromTagFragmentViewModelListener;
+    public void onOkButtonClicked() {
+        okButtonClicked.setValue(true);
     }
 
-    public interface ReadFromTagFragmentViewModelListener {
-        Context getContext();
-
-        void setSetTagContentToTextOutput(int redEmployeeId, long redTimeStamp, long redTimeStampNext, String redComment);
-    }
 }

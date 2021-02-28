@@ -26,4 +26,5 @@
     <string name="comment_error_too_long">Your comment is too long</string>
     <string name="write_to_tag_error">Error writing to Tag</string>
     <string name="data_incomplete_error_msg">Data are incomplete</string>
+    <string name="failed_to_read_tag_msg">Failed to read NFC Tag</string>
 </resources>

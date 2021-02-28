@@ -131,4 +131,12 @@ public class ResultsViewModel extends ViewModel {
         dateAndTimeCalendar.setValue(null);
         nextDateAndTimeCalendar.setValue(null);
     }
+
+    public void setMaintenanceData(MaintenanceData maintenanceData) {
+        employeeId.setValue(String.valueOf(maintenanceData.getEmployeeId()));
+        Calendar.getInstance().setTimeInMillis(maintenanceData.getTimestamp());
+        dateAndTime.setValue(CalendarUtils.getStringFromMillis(maintenanceData.getTimestamp()));
+        nextDateAndTime.setValue(CalendarUtils.getStringFromMillis(maintenanceData.getNextTimestamp()));
+        comment.setValue(maintenanceData.getComment());
+    }
 }
