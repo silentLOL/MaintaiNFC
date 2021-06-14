@@ -6,15 +6,16 @@
     tools:context=".view.MainActivity"
     android:weightSum="2"
     android:orientation="vertical">
-    <fragment
-        android:id="@+id/result_fragment"
-        android:layout_margin="@dimen/margin_results"
-        android:name="at.stefanirndorfer.maintainfc.view.ResultsFragment"
+
+    <FrameLayout
+        android:id="@+id/main_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
-    <FrameLayout
-        android:id="@+id/main_fragment_container"
+    <fragment
+        android:id="@+id/result_fragment"
+        android:layout_margin="@dimen/margin_start_results"
+        android:name="at.stefanirndorfer.maintainfc.view.ResultsFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>

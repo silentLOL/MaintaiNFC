@@ -8,7 +8,7 @@
     <string name="employee_id_label">Employee Id:</string>
     <string name="pick_date_button_label">Date</string>
     <string name="pick_time_button_label">Time</string>
-    <string name="comment_et_hint">Comment</string>
+    <string name="comment_et_hint">Comment (optional)</string>
     <string name="your_employee_id_hint">Your Employee Id</string>
     <string name="next">Next</string>
     <string name="set_date_and_time_bt_label">Set Date and Time</string>
@@ -27,4 +27,12 @@
     <string name="write_to_tag_error">Error writing to Tag</string>
     <string name="data_incomplete_error_msg">Data are incomplete</string>
     <string name="failed_to_read_tag_msg">Failed to read NFC Tag</string>
+    <string name="set_comment_toolbar_title">Add Comment</string>
+    <string name="read_tag_toolbar_title">NFC Auslesen</string>
+    <string name="summary_toolbar_title">Zusammenfassung</string>
+    <string name="employee_id_toolbar_title">Enter your Id</string>
+    <string name="this_date_toolbar_title">Date and Time</string>
+    <string name="next_date_toolbar_title">Next Service</string>
+    <string name="write_toolbar_title">Writing to Tag</string>
+    <string name="tag_is_empty__msg">Tag is empty</string>
 </resources>

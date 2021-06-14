@@ -52,6 +52,10 @@ public class ReadFromTagFragment extends BaseFragment {
                 Toast.makeText(this.getContext(), R.string.failed_to_read_tag_msg, LENGTH_LONG).show();
                 readFromTagViewModel.isNextButtonAvailable.setValue(false);
             }
+            if (data.equals(ReadFromTagResult.EMPTY)) {
+                Toast.makeText(this.getContext(), R.string.tag_is_empty__msg, LENGTH_LONG).show();
+                readFromTagViewModel.isNextButtonAvailable.setValue(true);
+            }
             if (data.equals(ReadFromTagResult.SUCCESS)) {
                 readFromTagViewModel.isNextButtonAvailable.setValue(true);
             }
@@ -96,6 +100,11 @@ public class ReadFromTagFragment extends BaseFragment {
     @Override
     void setResultsFragmentVisibility() {
         navigationListener.setResultsFragmentVisibility(View.GONE);
+    }
+
+    @Override
+    void setToolbarTitle() {
+        getActivity().setTitle(R.string.read_tag_toolbar_title);
     }
 
     public void setRawMessage(Parcelable[] rawMessage) {

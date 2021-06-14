@@ -24,11 +24,6 @@
         android:layout_height="wrap_content"
         android:onClick="@{()-> viewModel.onWriteButtonClick()}"
         android:text="@string/write_to_tag_bt_label" />
-    <Button
-        android:id="@+id/format_tag_bt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/format_tag_bt_label" />
 
 </LinearLayout>
 </layout>

@@ -73,6 +73,10 @@ public class SetDateTimeFragment extends BaseFragment {
         navigationListener.setResultsFragmentVisibility(View.VISIBLE);
     }
 
+    @Override
+    void setToolbarTitle() {
+        getActivity().setTitle(R.string.this_date_toolbar_title);
+    }
 
     public void navigateForward() {
         navigationListener.navigateToSetNextDateTimeFragment();

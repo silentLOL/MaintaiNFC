@@ -51,6 +51,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        setToolbarTitle();
         Timber.d("onResume");
     }
 
@@ -86,5 +87,7 @@ public abstract class BaseFragment extends Fragment {
     abstract void setShowHomeButton();
 
     abstract void setResultsFragmentVisibility();
+
+    abstract void setToolbarTitle();
 
 }

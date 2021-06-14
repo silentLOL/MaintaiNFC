@@ -59,6 +59,11 @@ public class SummaryFragment extends BaseFragment {
         navigationListener.setResultsFragmentVisibility(View.VISIBLE);
     }
 
+    @Override
+    void setToolbarTitle() {
+        getActivity().setTitle(R.string.summary_toolbar_title);
+    }
+
     public void navigateForward() {
         ResultsViewModel resultsViewModel = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
         resultsViewModel.clearData();

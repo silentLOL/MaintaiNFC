@@ -33,9 +33,11 @@ public class SetCommentFragment extends BaseFragment {
     void onCreateSetupViewModel(ViewDataBinding binding) {
         SetCommentViewModel setCommentViewModel = new ViewModelProvider(requireActivity()).get(SetCommentViewModel.class);
         ((SetCommentFragmentBinding) binding).setViewModel(setCommentViewModel);
+        setCommentViewModel.isNextButtonAvailable.setValue(true);
+        ResultsViewModel model = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
+        model.comment.setValue("");
         setCommentViewModel.comment.observe(this, comment -> {
             Timber.d("comment is set to: %s", comment);
-            ResultsViewModel model = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
             model.comment.setValue(comment);
             CommentEvaluation commentEvaluation = model.validateCommentInput(comment);
             if (commentEvaluation == CommentEvaluation.OK) {
@@ -67,6 +69,11 @@ public class SetCommentFragment extends BaseFragment {
     @Override
     void setResultsFragmentVisibility() {
         navigationListener.setResultsFragmentVisibility(View.VISIBLE);
+    }
+
+    @Override
+    void setToolbarTitle() {
+        getActivity().setTitle(R.string.set_comment_toolbar_title);
     }
 
     public void navigateForward() {

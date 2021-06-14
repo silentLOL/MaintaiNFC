@@ -75,6 +75,11 @@ public class SetNextDateTimeFragment extends BaseFragment {
         navigationListener.setResultsFragmentVisibility(View.VISIBLE);
     }
 
+    @Override
+    void setToolbarTitle() {
+        getActivity().setTitle(R.string.next_date_toolbar_title);
+    }
+
 
     public void navigateForward() {
         navigationListener.navigateToSetCommentFragment();

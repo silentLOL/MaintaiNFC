@@ -2,4 +2,5 @@
 <resources>
     <dimen name="margin_button">32dp</dimen>
     <dimen name="margin_results">8dp</dimen>
+    <dimen name="margin_start_results">32dp</dimen>
 </resources>

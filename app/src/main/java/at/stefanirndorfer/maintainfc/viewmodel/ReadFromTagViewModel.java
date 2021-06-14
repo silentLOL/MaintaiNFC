@@ -42,6 +42,7 @@ public class ReadFromTagViewModel extends ViewModel {
     private void buildTagViews(NdefMessage[] msgs) {
         if (msgs == null || msgs.length == 0) {
             Timber.w("msg is null or empty");
+            readingResult.setValue(ReadFromTagResult.EMPTY);
             return;
         }
 
@@ -52,6 +53,11 @@ public class ReadFromTagViewModel extends ViewModel {
 
         //        String tagId = new String(msgs[0].getRecords()[0].getType());
         byte[] payload = msgs[0].getRecords()[0].getPayload();
+        if (payload.length == 0){
+            Timber.w("msg is null or empty");
+            readingResult.setValue(ReadFromTagResult.EMPTY);
+            return;
+        }
         String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16"; // Get the Text Encoding
         int languageCodeLength = payload[0] & 0063; // Get the Language Code, e.g. "en"
         // String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");

@@ -80,6 +80,12 @@ public class MainScreenFragment extends BaseFragment {
         navigationListener.navigateToSetEmployeeIdFragment();
     }
 
+    @Override
+    void setToolbarTitle() {
+        Timber.d("setting toolbar title");
+        getActivity().setTitle(R.string.app_name);
+    }
+
     void navigateToFormatTagFragment() {
         navigationListener.navigateToFormatTagFragment();
     }

@@ -12,6 +12,7 @@ public class Constants {
     public static final int TIMESTAMP_THIS_INDEX = OUR_HEADER_LENGTH + EMPLOYEE_ID_SIZE;
     public static final int TIMESTAMP_NEXT_INDEX = TIMESTAMP_THIS_INDEX + TIMESTAMP_SIZE;
     public static final int COMMENT_INDEX = TIMESTAMP_NEXT_INDEX + TIMESTAMP_SIZE;
+    public static final String FORMATABELE_TECH = "android.nfc.tech.NdefFormatable";
 
 
     // validation constants

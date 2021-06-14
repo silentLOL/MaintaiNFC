@@ -65,7 +65,7 @@ public class WriteToTagFragment extends BaseFragment {
                 Toast.makeText(this.getContext(), getString(R.string.write_to_tag_error), LENGTH_LONG).show();
                 return;
             }
-            if (result.equals(WriteToTagResult.SUCCESS)) {
+            if (result.equals(WriteToTagResult.SUCCESS) || result.equals(WriteToTagResult.FORMATTED)) {
                 navigateForward();
             }
         });
@@ -84,6 +84,11 @@ public class WriteToTagFragment extends BaseFragment {
     @Override
     void setResultsFragmentVisibility() {
         navigationListener.setResultsFragmentVisibility(View.GONE);
+    }
+
+    @Override
+    void setToolbarTitle() {
+        getActivity().setTitle(R.string.write_toolbar_title);
     }
 
     public void navigateForward() {

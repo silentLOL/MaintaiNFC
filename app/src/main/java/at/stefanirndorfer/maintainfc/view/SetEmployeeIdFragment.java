@@ -67,6 +67,10 @@ public class SetEmployeeIdFragment extends BaseFragment {
         navigationListener.setResultsFragmentVisibility(View.VISIBLE);
     }
 
+    @Override
+    void setToolbarTitle() {
+        getActivity().setTitle(R.string.employee_id_toolbar_title);
+    }
 
     public void navigateForward() {
         navigationListener.navigateToSetDateTimeFragment();

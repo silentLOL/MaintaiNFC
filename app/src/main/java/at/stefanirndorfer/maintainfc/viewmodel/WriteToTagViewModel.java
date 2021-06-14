@@ -4,6 +4,7 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
+import android.nfc.tech.NdefFormatable;
 import android.text.TextUtils;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModel;
 import at.stefanirndorfer.maintainfc.model.MaintenanceData;
 import at.stefanirndorfer.maintainfc.model.SingleLiveEvent;
 import at.stefanirndorfer.maintainfc.model.WriteToTagResult;
+import at.stefanirndorfer.maintainfc.util.Constants;
 import timber.log.Timber;
 
 import static at.stefanirndorfer.maintainfc.util.Constants.COMMENT_INDEX;
@@ -79,12 +81,18 @@ public class WriteToTagViewModel extends ViewModel {
         try {
             // this is needed in case you have a new NFC Tag and it needs to be formatted before use
             String[] techList = tag.getTechList();
-            //            NdefFormatable ndefFormatable = NdefFormatable.get(tag);
-            //            ndefFormatable.connect();
-            //            ndefFormatable.format(message);
-            //            ndefFormatable.close();
-
+            if (techListContainsFormatable(techList)) {
+                Timber.d("formatting tag");
+                // if tag needs to be formatted techlist contains: "android.nfc.tech.NdefFormatable"
+                NdefFormatable ndefFormatable = NdefFormatable.get(tag);
+                ndefFormatable.connect();
+                ndefFormatable.format(message);
+                ndefFormatable.close();
+                writingResult.setValue(WriteToTagResult.FORMATTED);
+                return;
+            }
             // Get an instance of Ndef for the tag.
+            // if ndef is available, techList contains: android.nfc.tech.Ndef
             Ndef ndef = Ndef.get(tag);
             // Enable I/O
             ndef.connect();
@@ -98,6 +106,15 @@ public class WriteToTagViewModel extends ViewModel {
             Timber.e(e);
             writingResult.setValue(WriteToTagResult.FAIL);
         }
+    }
+
+    private boolean techListContainsFormatable(String[] techList) {
+        for (String currString : techList) {
+            if (currString.equals(Constants.FORMATABELE_TECH)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private NdefRecord createRecord(byte[] textBytes) throws UnsupportedEncodingException {

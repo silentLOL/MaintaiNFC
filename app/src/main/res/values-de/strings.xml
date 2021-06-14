@@ -9,8 +9,8 @@
     <string name="employee_id_label">Mitarbeiter Id:</string>
     <string name="pick_date_button_label">Datum</string>
     <string name="pick_time_button_label">Zeit</string>
-    <string name="comment_et_hint">Kommentar</string>
-    <string name="your_employee_id_hint">Ihre Mitarbeiter-Id</string>
+    <string name="comment_et_hint">Kommentar (optional)</string>
+    <string name="your_employee_id_hint">Ihre Mitarbeiter-ID</string>
     <string name="next">Weiter</string>
     <string name="set_date_and_time_bt_label">Zeit und Datum setzten</string>
     <string name="date_label">Datum:</string>
@@ -23,9 +23,17 @@
     <string name="ok">Ok</string>
     <string name="set_next_date_and_time_bt_label">Nächstes Service</string>
     <string name="next_date_and_time_label">Zeit und Datum des nächsten Services</string>
-    <string name="input_your_employee_id_label">Bitte Id eingeben:</string>
+    <string name="input_your_employee_id_label">Ihre ID eingeben:</string>
     <string name="comment_error_too_long">Ihr Kommentar ist zu lange</string>
     <string name="write_to_tag_error">Bei der Übertragung ist ein Problem aufgetreten.</string>
     <string name="data_incomplete_error_msg">Daten sind unvollständing</string>
     <string name="failed_to_read_tag_msg">Beim Auslesen ist ein Fehler aufgetreten.</string>
+    <string name="set_comment_toolbar_title">Ihr Kommentar</string>
+    <string name="read_tag_toolbar_title">NFC Auslesen</string>
+    <string name="summary_toolbar_title">Zusammenfassung</string>
+    <string name="employee_id_toolbar_title">ID Eingeben</string>
+    <string name="this_date_toolbar_title">Datum Eingeben</string>
+    <string name="next_date_toolbar_title">Datum nächstes Service</string>
+    <string name="write_toolbar_title">NFC Beschreiben</string>
+    <string name="tag_is_empty__msg">Keine Daten auf dem Tag</string>
 </resources>
