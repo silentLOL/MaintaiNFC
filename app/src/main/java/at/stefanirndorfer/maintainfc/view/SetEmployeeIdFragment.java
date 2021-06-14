@@ -1,7 +1,6 @@
 package at.stefanirndorfer.maintainfc.view;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,8 +38,11 @@ public class SetEmployeeIdFragment extends BaseFragment {
             Timber.d("employeeId is set to: %s", data);
             ResultsViewModel model = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
             model.employeeId.setValue(data);
-            if (model.validateEmployeeIdInput() == EmployeeIdEvaluation.OK){
+            if (model.validateEmployeeIdInput() == EmployeeIdEvaluation.OK) {
                 setEmployeeIdViewModel.isNextButtonAvailable.setValue(true);
+            }
+            if (model.validateEmployeeIdInput() == EmployeeIdEvaluation.EMPTY) {
+                setEmployeeIdViewModel.isNextButtonAvailable.setValue(false);
             }
         });
 

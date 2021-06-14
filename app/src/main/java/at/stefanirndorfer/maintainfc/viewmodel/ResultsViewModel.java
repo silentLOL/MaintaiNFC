@@ -1,5 +1,7 @@
 package at.stefanirndorfer.maintainfc.viewmodel;
 
+import android.text.TextUtils;
+
 import java.util.Calendar;
 
 import androidx.lifecycle.MutableLiveData;
@@ -54,6 +56,7 @@ public class ResultsViewModel extends ViewModel {
             Timber.d("The required data are not given");
             return null;
         }
+
         return new MaintenanceData(Integer.valueOf(employeeId.getValue()),
                                    dateAndTimeCalendar.getValue().getTimeInMillis(),
                                    nextDateAndTimeCalendar.getValue().getTimeInMillis(),
@@ -73,7 +76,7 @@ public class ResultsViewModel extends ViewModel {
 
 
     public EmployeeIdEvaluation validateEmployeeIdInput() {
-        if (employeeId.getValue() == null) {
+        if (TextUtils.isEmpty(employeeId.getValue())) {
             return EmployeeIdEvaluation.EMPTY;
         }
         return EmployeeIdEvaluation.OK;

@@ -81,6 +81,10 @@ public class WriteToTagViewModel extends ViewModel {
         try {
             // this is needed in case you have a new NFC Tag and it needs to be formatted before use
             String[] techList = tag.getTechList();
+            if (techList.length == 0) {
+                Timber.d("empty techlist");
+                return;
+            }
             if (techListContainsFormatable(techList)) {
                 Timber.d("formatting tag");
                 // if tag needs to be formatted techlist contains: "android.nfc.tech.NdefFormatable"
