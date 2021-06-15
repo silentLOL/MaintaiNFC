@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ServiceNFC</string>
+    <string name="app_name">NFC Wartung</string>
     <string name="read_tag_bt_label">NFC Auslesen</string>
     <string name="write_to_tag_bt_label">NFC Beschreiben</string>
     <string name="format_tag_bt_label">Formatieren</string>
