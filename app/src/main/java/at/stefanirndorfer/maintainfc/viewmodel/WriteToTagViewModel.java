@@ -38,6 +38,7 @@ public class WriteToTagViewModel extends ViewModel {
      * - header
      * - employeeId
      * - timestamp
+     * - timestamp next
      * - comment
      *
      * @param data
