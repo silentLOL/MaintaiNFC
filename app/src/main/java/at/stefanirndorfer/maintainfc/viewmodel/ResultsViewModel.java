@@ -59,8 +59,7 @@ public class ResultsViewModel extends ViewModel {
 
         return new MaintenanceData(Integer.valueOf(employeeId.getValue()),
                                    dateAndTimeCalendar.getValue().getTimeInMillis(),
-                                   nextDateAndTimeCalendar.getValue().getTimeInMillis(),
-                                   comment.getValue());
+                                   nextDateAndTimeCalendar.getValue().getTimeInMillis());
     }
 
     /**
@@ -140,6 +139,5 @@ public class ResultsViewModel extends ViewModel {
         Calendar.getInstance().setTimeInMillis(maintenanceData.getTimestamp());
         dateAndTime.setValue(CalendarUtils.getStringFromMillis(maintenanceData.getTimestamp()));
         nextDateAndTime.setValue(CalendarUtils.getStringFromMillis(maintenanceData.getNextTimestamp()));
-        comment.setValue(maintenanceData.getComment());
     }
 }

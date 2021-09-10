@@ -82,6 +82,6 @@ public class SetNextDateTimeFragment extends BaseFragment {
 
 
     public void navigateForward() {
-        navigationListener.navigateToSetCommentFragment();
+        navigationListener.navigateToWriteToTagFragment();
     }
 }

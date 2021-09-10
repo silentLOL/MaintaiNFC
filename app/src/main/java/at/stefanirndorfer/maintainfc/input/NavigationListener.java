@@ -13,8 +13,6 @@ public interface NavigationListener {
 
     void navigateToSetNextDateTimeFragment();
 
-    void navigateToSetCommentFragment();
-
     void navigateToSummaryFragment();
 
     void navigateToWriteToTagFragment();

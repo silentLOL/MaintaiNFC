@@ -5,7 +5,6 @@ import android.nfc.NdefRecord;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
-import android.text.TextUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -19,7 +18,6 @@ import at.stefanirndorfer.maintainfc.model.WriteToTagResult;
 import at.stefanirndorfer.maintainfc.util.Constants;
 import timber.log.Timber;
 
-import static at.stefanirndorfer.maintainfc.util.Constants.COMMENT_INDEX;
 import static at.stefanirndorfer.maintainfc.util.Constants.EMPLOYEE_ID_INDEX;
 import static at.stefanirndorfer.maintainfc.util.Constants.EMPLOYEE_ID_SIZE;
 import static at.stefanirndorfer.maintainfc.util.Constants.OUR_HEADER_LENGTH;
@@ -49,19 +47,14 @@ public class WriteToTagViewModel extends ViewModel {
         long timeStampNext = data.getNextTimestamp();
         Integer employeeId = data.getEmployeeId();
         Long timestamp = data.getTimestamp();
-        String comment = data.getComment();
         if (tag == null) {
             Timber.d("tag is null");
             return;
         }
-        if (comment == null || TextUtils.isEmpty(comment)) {
-            comment = "";
-        }
         byte[] employeeIdBytes = ByteBuffer.allocate(EMPLOYEE_ID_SIZE).putInt(employeeId).array();
         byte[] timestampThisBytes = ByteBuffer.allocate(TIMESTAMP_SIZE).putLong(timestamp).array();
         byte[] timestampNextBytes = ByteBuffer.allocate(TIMESTAMP_SIZE).putLong(timeStampNext).array();
-        byte[] commentBytes = comment.getBytes();
-        int payloadLen = employeeIdBytes.length + timestampThisBytes.length + timestampNextBytes.length + commentBytes.length;
+        int payloadLen = employeeIdBytes.length + timestampThisBytes.length + timestampNextBytes.length;
         byte[] headerBytes = new byte[OUR_HEADER_LENGTH];
         short len = (short) (payloadLen + OUR_HEADER_LENGTH);
         headerBytes[4] = (byte) (len >>> 8);
@@ -76,7 +69,6 @@ public class WriteToTagViewModel extends ViewModel {
         System.arraycopy(employeeIdBytes, 0, fullBytes, EMPLOYEE_ID_INDEX, employeeIdBytes.length);
         System.arraycopy(timestampThisBytes, 0, fullBytes, TIMESTAMP_THIS_INDEX, timestampThisBytes.length);
         System.arraycopy(timestampNextBytes, 0, fullBytes, TIMESTAMP_NEXT_INDEX, timestampNextBytes.length);
-        System.arraycopy(commentBytes, 0, fullBytes, COMMENT_INDEX, commentBytes.length);
         NdefRecord[] records = {createRecord(fullBytes)};
         NdefMessage message = new NdefMessage(records);
         try {
