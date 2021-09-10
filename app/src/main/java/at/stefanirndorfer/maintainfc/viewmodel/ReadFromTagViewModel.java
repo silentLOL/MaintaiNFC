@@ -11,9 +11,9 @@ import at.stefanirndorfer.maintainfc.model.ReadFromTagResult;
 import at.stefanirndorfer.maintainfc.model.SingleLiveEvent;
 import timber.log.Timber;
 
-import static at.stefanirndorfer.maintainfc.util.Constants.COMMENT_INDEX;
 import static at.stefanirndorfer.maintainfc.util.Constants.EMPLOYEE_ID_SIZE;
 import static at.stefanirndorfer.maintainfc.util.Constants.OUR_HEADER_LENGTH;
+import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_NEXT_INDEX;
 import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_SIZE;
 
 public class ReadFromTagViewModel extends ViewModel {
@@ -61,8 +61,9 @@ public class ReadFromTagViewModel extends ViewModel {
         // String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
 
         // check if the content is long enough
-        if (languageCodeLength + 1 + COMMENT_INDEX >= payload.length) {
+        if (languageCodeLength + 1 + TIMESTAMP_NEXT_INDEX >= payload.length) {
             Timber.w("Tags content cannot be read");
+            Timber.w("expected min payload length: " + languageCodeLength + 1 + TIMESTAMP_NEXT_INDEX + " -- actual length: " + payload.length);
             readingResult.setValue(ReadFromTagResult.FAIL);
             return;
         }
