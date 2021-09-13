@@ -59,7 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_results"
-        android:text="@string/set_next_date_and_time_bt_label"
+        android:text="@string/next_date"
         app:layout_constraintTop_toBottomOf="@+id/date_and_time_result" />
 
     <TextView

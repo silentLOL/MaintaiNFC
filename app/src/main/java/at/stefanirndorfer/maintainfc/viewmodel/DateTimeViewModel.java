@@ -77,6 +77,10 @@ public class DateTimeViewModel extends ViewModel {
     public void initDateTimeData() {
         // Get Current Date
         final Calendar c = Calendar.getInstance();
+        setDataFromCalendar(c);
+    }
+
+    public void setDataFromCalendar(Calendar c) {
         setYear(c.get(Calendar.YEAR));
         setMonth(c.get(Calendar.MONTH));
         setDay(c.get(Calendar.DAY_OF_MONTH));

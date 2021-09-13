@@ -16,7 +16,7 @@
     <string name="date_and_time_label">Date and Time:</string>
     <string name="summary_message">The following data have been successfully written to the device:</string>
     <string name="ok">Ok</string>
-    <string name="set_next_date_and_time_bt_label">Next maintenance</string>
+    <string name="custom_nextDate_bt_label">Custom Date</string>
     <string name="next_date_and_time_label">Next Date and Time</string>
     <string name="input_your_employee_id_label">Enter your Id:</string>
     <string name="write_to_tag_error">Error writing to Tag</string>
@@ -29,4 +29,8 @@
     <string name="next_date_toolbar_title">Next Service</string>
     <string name="write_toolbar_title">Writing to Tag</string>
     <string name="tag_is_empty__msg">Tag is empty</string>
+    <string name="label_6_month">in 6 months</string>
+    <string name="label_1_year">in 1 year</string>
+    <string name="label_2_years">in 2 years</string>
+    <string name="next_date">Next Date</string>
 </resources>

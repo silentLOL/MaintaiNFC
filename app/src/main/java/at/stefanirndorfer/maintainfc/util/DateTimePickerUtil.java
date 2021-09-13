@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 
+import java.util.Calendar;
 import java.util.Objects;
 
 import at.stefanirndorfer.maintainfc.viewmodel.DateTimeViewModel;
@@ -38,8 +39,8 @@ public class DateTimePickerUtil {
                     setDateTimeViewModel.triggerDataEvaluation();
                 },
                 // initial time values
-                setDateTimeViewModel.getHour(),
-                setDateTimeViewModel.getMinute(),
+                Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
+                Calendar.getInstance().get(Calendar.MINUTE),
                 true);
         timePickerDialog.show();
     }

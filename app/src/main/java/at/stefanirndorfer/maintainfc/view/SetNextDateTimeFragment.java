@@ -5,6 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Calendar;
+import java.util.Objects;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -38,14 +41,24 @@ public class SetNextDateTimeFragment extends BaseFragment {
 
         setNextDateTimeViewModel.initDateTimeData();
 
+        ResultsViewModel model = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
+        long currTimeInMillis = Objects.requireNonNull(model.dateAndTimeCalendar.getValue()).getTimeInMillis();
+
         setNextDateTimeViewModel.setNextDateTimeButtonPressed.observe(this, pressed -> {
             if (pressed) {
                 DateTimePickerUtil.setDateTime(this.getContext(), setNextDateTimeViewModel);
             }
         });
 
+        setNextDateTimeViewModel.setNextPredefinedDateTimePressed.observe(this, offsetInMillis -> {
+            Calendar tempCalendar = setNextDateTimeViewModel.getCalendar();
+            tempCalendar.setTimeInMillis(currTimeInMillis + offsetInMillis);
+            Timber.d("setting next date to " + tempCalendar.toString());
+            setNextDateTimeViewModel.setDataFromCalendar(tempCalendar);
+            setNextDateTimeViewModel.triggerDataEvaluation();
+        });
+
         setNextDateTimeViewModel.triggerDataEvaluation.observe(this, evaluate -> {
-            ResultsViewModel model = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
             boolean isValidInput = model.validateNextDateTimeInput(setNextDateTimeViewModel.getCalendar()) == NextDateTimeEvaluation.OK;
             if (isValidInput) {
                 setNextDateTimeViewModel.isNextButtonAvailable.setValue(true);

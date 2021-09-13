@@ -17,7 +17,7 @@
     <string name="date_and_time_label">Datum und Zeit:</string>
     <string name="summary_message">Folgende Daten wurden erfolgreich übertragen:</string>
     <string name="ok">Ok</string>
-    <string name="set_next_date_and_time_bt_label">Nächstes Service</string>
+    <string name="custom_nextDate_bt_label">anderer Termin</string>
     <string name="next_date_and_time_label">Zeit und Datum des nächsten Services</string>
     <string name="input_your_employee_id_label">Ihre ID eingeben:</string>
     <string name="write_to_tag_error">Bei der Übertragung ist ein Problem aufgetreten.</string>
@@ -27,7 +27,12 @@
     <string name="summary_toolbar_title">Zusammenfassung</string>
     <string name="employee_id_toolbar_title">ID Eingeben</string>
     <string name="this_date_toolbar_title">Datum Eingeben</string>
-    <string name="next_date_toolbar_title">Datum nächstes Service</string>
+    <string name="next_date_toolbar_title">Nächste Wartung</string>
     <string name="write_toolbar_title">NFC Beschreiben</string>
     <string name="tag_is_empty__msg">Keine Daten auf dem Tag</string>
+    <string name="label_6_month">in 6 Monaten</string>
+    <string name="label_1_year">in 1 Jahr</string>
+    <string name="label_2_years">in 2 Jahren</string>
+    <string name="next_date">Nächte Wartung</string>
+
 </resources>

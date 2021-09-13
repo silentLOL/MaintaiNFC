@@ -1,28 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <data>
-        <variable
-            name="viewModel"
-            type="at.stefanirndorfer.maintainfc.viewmodel.SetNextDateTimeViewModel" />
-    </data>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".view.SetNextDateTimeFragment">
-
-        <Button
-            android:id="@+id/set_next_date_time_bt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_button"
-            android:text="@string/set_next_date_and_time_bt_label"
-            android:onClick="@{()-> viewModel.onSetNextDateTimeButtonPressed()}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/next_date_time_next_bt"
@@ -36,5 +20,60 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_button"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()-> viewModel.onSetNextDateInSixMonths()}"
+                    android:textStyle="bold"
+                    android:text="@string/label_6_month" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()-> viewModel.onSetNextDateInOneYear()}"
+                    android:textStyle="bold"
+                    android:enabled="true"
+                    android:text="@string/label_1_year" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()-> viewModel.onSetNextDateInTwoYears()}"
+                    android:textStyle="bold"
+                    android:text="@string/label_2_years" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:onClick="@{()-> viewModel.onSetNextDateTimeButtonPressed()}"
+                    android:text="@string/custom_nextDate_bt_label" />
+
+            </RadioGroup>
+        </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="at.stefanirndorfer.maintainfc.viewmodel.SetNextDateTimeViewModel" />
+    </data>
 </layout>
