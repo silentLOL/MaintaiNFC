@@ -21,7 +21,6 @@ public class ResultsViewModel extends ViewModel {
     public MutableLiveData<String> employeeId;
     public MutableLiveData<String> dateAndTime;
     public MutableLiveData<String> nextDateAndTime;
-    public MutableLiveData<String> comment;
     public MutableLiveData<Calendar> dateAndTimeCalendar;
     public MutableLiveData<Calendar> nextDateAndTimeCalendar;
 
@@ -31,7 +30,6 @@ public class ResultsViewModel extends ViewModel {
         nextDateAndTime = new MutableLiveData<>();
         dateAndTimeCalendar = new MutableLiveData<>();
         nextDateAndTimeCalendar = new MutableLiveData<>();
-        comment = new MutableLiveData<>();
     }
 
     public void setDateAndTimeCalendar(Calendar dateAndTimeCalendar) {
@@ -113,7 +111,6 @@ public class ResultsViewModel extends ViewModel {
         employeeId.setValue("");
         dateAndTime.setValue("");
         nextDateAndTime.setValue("");
-        comment.setValue("");
         dateAndTimeCalendar.setValue(null);
         nextDateAndTimeCalendar.setValue(null);
     }

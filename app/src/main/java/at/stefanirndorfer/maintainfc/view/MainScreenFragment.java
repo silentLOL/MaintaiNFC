@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Calendar;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -13,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import at.stefanirndorfer.maintainfc.R;
 import at.stefanirndorfer.maintainfc.databinding.MainScreenFragmentBinding;
 import at.stefanirndorfer.maintainfc.viewmodel.MainScreenViewModel;
+import at.stefanirndorfer.maintainfc.viewmodel.ResultsViewModel;
 import timber.log.Timber;
 
 public class MainScreenFragment extends BaseFragment {
@@ -41,6 +44,13 @@ public class MainScreenFragment extends BaseFragment {
             mainScreenViewModel.goToWrite.observe(this, isGoingToWrite -> {
                 if (isGoingToWrite != null && isGoingToWrite) {
                     Timber.d("we will navigate to write %s", this);
+
+                    // before that we want to clear the cached data in the model
+                    ResultsViewModel model = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
+                    model.clearData();
+
+                    // and we can already set the current date/time
+                    model.setDateAndTimeCalendar(Calendar.getInstance());
                     navigateToWriteToTagFragment();
                 }
             });

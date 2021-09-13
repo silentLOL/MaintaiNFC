@@ -12,9 +12,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import at.stefanirndorfer.maintainfc.R;
 import at.stefanirndorfer.maintainfc.input.NavigationListener;
 import at.stefanirndorfer.maintainfc.model.MaintenanceData;
+import at.stefanirndorfer.maintainfc.viewmodel.ResultsViewModel;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements NavigationListener {

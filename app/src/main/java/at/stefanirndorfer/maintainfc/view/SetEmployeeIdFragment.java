@@ -75,7 +75,7 @@ public class SetEmployeeIdFragment extends BaseFragment {
     }
 
     public void navigateForward() {
-        navigationListener.navigateToSetDateTimeFragment();
+        navigationListener.navigateToSetNextDateTimeFragment();
     }
 
 }
