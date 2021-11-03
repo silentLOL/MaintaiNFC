@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import at.stefanirndorfer.maintainfc.R;
 import at.stefanirndorfer.maintainfc.input.NavigationListener;
-import at.stefanirndorfer.maintainfc.model.MaintenanceData;
 import at.stefanirndorfer.maintainfc.viewmodel.ResultsViewModel;
 import timber.log.Timber;
 
@@ -206,6 +205,11 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     @Override
     public void navigateToReadFromTagFragment() {
         Timber.d("navigating to ReadFromTagFragment");
+//
+//        // we need to clear the data first
+//        ResultsViewModel model = new ViewModelProvider(this).get(ResultsViewModel.class);
+//        model.clearData();
+
         ReadFromTagFragment readFromTagFragment = ReadFromTagFragment.newInstance(null);
         fragmentManager.beginTransaction()
                 .replace(R.id.main_fragment_container, readFromTagFragment, ReadFromTagFragment.class.getCanonicalName())

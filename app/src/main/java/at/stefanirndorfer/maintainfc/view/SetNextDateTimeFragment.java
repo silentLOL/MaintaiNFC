@@ -85,7 +85,7 @@ public class SetNextDateTimeFragment extends BaseFragment {
 
     @Override
     void setResultsFragmentVisibility() {
-        navigationListener.setResultsFragmentVisibility(View.VISIBLE);
+        navigationListener.setResultsFragmentVisibility(View.GONE);
     }
 
     @Override

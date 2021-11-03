@@ -43,8 +43,11 @@ public class ReadFromTagFragment extends BaseFragment {
         ReadFromTagViewModel readFromTagViewModel = new ViewModelProvider(requireActivity()).get(ReadFromTagViewModel.class);
         ((ReadFromTagFragmentBinding) binding).setViewModel(readFromTagViewModel);
         showDataFromArgsIfGiven(readFromTagViewModel);
-
         ResultsViewModel model = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
+
+        // lets clear the data at the beginning
+        model.clearData();
+        readFromTagViewModel.isNextButtonAvailable.setValue(false);
 
         // indicates the outcome of the reading operation
         readFromTagViewModel.readingResult.observe(this, data -> {
@@ -70,8 +73,14 @@ public class ReadFromTagFragment extends BaseFragment {
         readFromTagViewModel.okButtonClicked.observe(this, clicked -> {
             Timber.d("Forward navigation clicked");
             model.clearData();
+            readFromTagViewModel.isNextButtonAvailable.setValue(false);
             navigationListener.navigateToMain();
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void showDataFromArgsIfGiven(ReadFromTagViewModel readFromTagViewModel) {
