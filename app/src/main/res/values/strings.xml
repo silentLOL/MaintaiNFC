@@ -13,7 +13,7 @@
     <string name="set_date_and_time_bt_label">Set Date and Time</string>
     <string name="date_label">Date:</string>
     <string name="time_label">Time:</string>
-    <string name="date_and_time_label">Date and Time:</string>
+    <string name="date_and_time_label">Date and Time last Maintenance:</string>
     <string name="summary_message">The following data have been successfully written to the device:</string>
     <string name="ok">Ok</string>
     <string name="custom_nextDate_bt_label">Custom Date</string>

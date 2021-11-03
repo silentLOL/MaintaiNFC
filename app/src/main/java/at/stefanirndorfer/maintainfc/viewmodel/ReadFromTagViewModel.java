@@ -49,7 +49,7 @@ public class ReadFromTagViewModel extends ViewModel {
         long redTimeStamp = 0;
         long redTimeStampNext = 0;
 
-        //        String tagId = new String(msgs[0].getRecords()[0].getType());
+        // String tagId = new String(msgs[0].getRecords()[0].getType());
         byte[] payload = msgs[0].getRecords()[0].getPayload();
         if (payload.length == 0) {
             Timber.w("msg is null or empty");
@@ -92,7 +92,7 @@ public class ReadFromTagViewModel extends ViewModel {
 
         // todo: refactor
         readingResult.setValue(ReadFromTagResult.SUCCESS);
-        resultData.setValue(new MaintenanceData(redEmployeeId, redTimeStamp, redTimeStampNext));
+        resultData.setValue(new MaintenanceData(redTimeStamp, redTimeStampNext));
     }
 
     public void onOkButtonClicked() {

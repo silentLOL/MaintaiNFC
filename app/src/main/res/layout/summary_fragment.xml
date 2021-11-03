@@ -3,7 +3,7 @@
     <data>
         <variable
             name="viewModel"
-            type="at.stefanirndorfer.maintainfc.view.SummaryViewModel" />
+            type="at.stefanirndorfer.maintainfc.viewmodel.SummaryViewModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"

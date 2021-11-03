@@ -1,13 +1,10 @@
 package at.stefanirndorfer.maintainfc.viewmodel;
 
-import android.text.TextUtils;
-
 import java.util.Calendar;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import at.stefanirndorfer.maintainfc.model.DateTimeEvaluation;
-import at.stefanirndorfer.maintainfc.model.EmployeeIdEvaluation;
 import at.stefanirndorfer.maintainfc.model.MaintenanceData;
 import at.stefanirndorfer.maintainfc.model.NextDateTimeEvaluation;
 import at.stefanirndorfer.maintainfc.util.CalendarUtils;
@@ -18,14 +15,12 @@ import timber.log.Timber;
  * also contains the validity checks for the input date
  */
 public class ResultsViewModel extends ViewModel {
-    public MutableLiveData<String> employeeId;
     public MutableLiveData<String> dateAndTime;
     public MutableLiveData<String> nextDateAndTime;
     public MutableLiveData<Calendar> dateAndTimeCalendar;
     public MutableLiveData<Calendar> nextDateAndTimeCalendar;
 
     public ResultsViewModel() {
-        employeeId = new MutableLiveData<>();
         dateAndTime = new MutableLiveData<>();
         nextDateAndTime = new MutableLiveData<>();
         dateAndTimeCalendar = new MutableLiveData<>();
@@ -53,8 +48,7 @@ public class ResultsViewModel extends ViewModel {
             return null;
         }
 
-        return new MaintenanceData(Integer.valueOf(employeeId.getValue()),
-                                   dateAndTimeCalendar.getValue().getTimeInMillis(),
+        return new MaintenanceData(dateAndTimeCalendar.getValue().getTimeInMillis(),
                                    nextDateAndTimeCalendar.getValue().getTimeInMillis());
     }
 
@@ -64,19 +58,9 @@ public class ResultsViewModel extends ViewModel {
      * @return true if data are complete
      */
     private boolean isDataComplete() {
-        return employeeId.getValue() != null
-               && dateAndTimeCalendar.getValue() != null
+        return dateAndTimeCalendar.getValue() != null
                && nextDateAndTimeCalendar.getValue() != null;
     }
-
-
-    public EmployeeIdEvaluation validateEmployeeIdInput() {
-        if (TextUtils.isEmpty(employeeId.getValue())) {
-            return EmployeeIdEvaluation.EMPTY;
-        }
-        return EmployeeIdEvaluation.OK;
-    }
-
 
     /**
      * todo: check if there is more to validate
@@ -108,7 +92,6 @@ public class ResultsViewModel extends ViewModel {
      * this deletes all the data
      */
     public void clearData() {
-        employeeId.setValue("");
         dateAndTime.setValue("");
         nextDateAndTime.setValue("");
         dateAndTimeCalendar.setValue(null);
@@ -116,7 +99,6 @@ public class ResultsViewModel extends ViewModel {
     }
 
     public void setMaintenanceData(MaintenanceData maintenanceData) {
-        employeeId.setValue(String.valueOf(maintenanceData.getEmployeeId()));
         Calendar.getInstance().setTimeInMillis(maintenanceData.getTimestamp());
         dateAndTime.setValue(CalendarUtils.getStringFromMillis(maintenanceData.getTimestamp()));
         nextDateAndTime.setValue(CalendarUtils.getStringFromMillis(maintenanceData.getNextTimestamp()));

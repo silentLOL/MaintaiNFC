@@ -87,7 +87,7 @@ public class MainScreenFragment extends BaseFragment {
 
     void navigateToWriteToTagFragment() {
         Timber.d("go to write. Instance: %s", this);
-        navigationListener.navigateToSetEmployeeIdFragment();
+        navigationListener.navigateToSetNextDateTimeFragment();
     }
 
     @Override

@@ -12,7 +12,6 @@ import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.ViewModelProvider;
 import at.stefanirndorfer.maintainfc.R;
 import at.stefanirndorfer.maintainfc.databinding.SetEmployeeIdFragmentBinding;
-import at.stefanirndorfer.maintainfc.model.EmployeeIdEvaluation;
 import at.stefanirndorfer.maintainfc.viewmodel.ResultsViewModel;
 import at.stefanirndorfer.maintainfc.viewmodel.SetEmployeeIdViewModel;
 import timber.log.Timber;
@@ -37,13 +36,13 @@ public class SetEmployeeIdFragment extends BaseFragment {
         setEmployeeIdViewModel.employeeId.observe(this, data -> {
             Timber.d("employeeId is set to: %s", data);
             ResultsViewModel model = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
-            model.employeeId.setValue(data);
-            if (model.validateEmployeeIdInput() == EmployeeIdEvaluation.OK) {
-                setEmployeeIdViewModel.isNextButtonAvailable.setValue(true);
-            }
-            if (model.validateEmployeeIdInput() == EmployeeIdEvaluation.EMPTY) {
-                setEmployeeIdViewModel.isNextButtonAvailable.setValue(false);
-            }
+            //            model.employeeId.setValue(data);
+            //            if (model.validateEmployeeIdInput() == EmployeeIdEvaluation.OK) {
+            //                setEmployeeIdViewModel.isNextButtonAvailable.setValue(true);
+            //            }
+            //            if (model.validateEmployeeIdInput() == EmployeeIdEvaluation.EMPTY) {
+            //                setEmployeeIdViewModel.isNextButtonAvailable.setValue(false);
+            //            }
         });
 
         setEmployeeIdViewModel.nextButtonPressed.observe(this, employeeId -> {

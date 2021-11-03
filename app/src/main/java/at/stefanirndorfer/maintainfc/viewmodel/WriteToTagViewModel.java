@@ -26,6 +26,7 @@ import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_SIZE;
 import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_THIS_INDEX;
 
 public class WriteToTagViewModel extends ViewModel {
+    private static final Integer HARD_CODED_EMPLOYEE_ID = 1; // this will eventually be replaced with actual data
     public SingleLiveEvent<WriteToTagResult> writingResult = new SingleLiveEvent<>();
 
     public WriteToTagViewModel() {
@@ -44,7 +45,7 @@ public class WriteToTagViewModel extends ViewModel {
      */
     public void write(MaintenanceData data, Tag tag) throws IOException {
         long timeStampNext = data.getNextTimestamp();
-        Integer employeeId = data.getEmployeeId();
+        Integer employeeId = HARD_CODED_EMPLOYEE_ID;
         Long timestamp = data.getTimestamp();
         if (tag == null) {
             Timber.d("tag is null");

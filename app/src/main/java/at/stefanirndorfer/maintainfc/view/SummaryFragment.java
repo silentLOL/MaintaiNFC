@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import at.stefanirndorfer.maintainfc.R;
 import at.stefanirndorfer.maintainfc.databinding.SummaryFragmentBinding;
 import at.stefanirndorfer.maintainfc.viewmodel.ResultsViewModel;
+import at.stefanirndorfer.maintainfc.viewmodel.SummaryViewModel;
 import timber.log.Timber;
 
 public class SummaryFragment extends BaseFragment {

@@ -14,7 +14,7 @@
     <string name="set_date_and_time_bt_label">Zeit und Datum setzten</string>
     <string name="date_label">Datum:</string>
     <string name="time_label">Zeit:</string>
-    <string name="date_and_time_label">Datum und Zeit:</string>
+    <string name="date_and_time_label">Aktuelle Wartung:</string>
     <string name="summary_message">Folgende Daten wurden erfolgreich übertragen:</string>
     <string name="ok">Ok</string>
     <string name="custom_nextDate_bt_label">anderer Termin</string>

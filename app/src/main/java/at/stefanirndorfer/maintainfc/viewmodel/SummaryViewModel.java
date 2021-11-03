@@ -1,4 +1,4 @@
-package at.stefanirndorfer.maintainfc.view;
+package at.stefanirndorfer.maintainfc.viewmodel;
 
 import androidx.lifecycle.ViewModel;
 import at.stefanirndorfer.maintainfc.model.SingleLiveEvent;

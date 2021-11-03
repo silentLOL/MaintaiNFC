@@ -4,16 +4,15 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class MaintenanceData(
-        var employeeId: Int?,
-        var timestamp: Long?,
-        var nextTimestamp: Long?) : Parcelable {
+    var timestamp: Long?,
+    var nextTimestamp: Long?
+) : Parcelable {
     constructor(parcel: Parcel) : this(
-            parcel.readValue(Int::class.java.classLoader) as? Int,
-            parcel.readValue(Long::class.java.classLoader) as? Long,
-            parcel.readValue(Long::class.java.classLoader) as? Long)
+        parcel.readValue(Long::class.java.classLoader) as? Long,
+        parcel.readValue(Long::class.java.classLoader) as? Long
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeValue(employeeId)
         parcel.writeValue(timestamp)
         parcel.writeValue(nextTimestamp)
     }

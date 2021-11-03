@@ -33,9 +33,9 @@ public class ResultsFragment extends Fragment {
     private void onCreateSetupViewModel(ResultsFragmentBinding binding) {
         ResultsViewModel viewModel = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
         binding.setViewModel(viewModel);
-        viewModel.employeeId.observe(getViewLifecycleOwner(), employeeId -> {
-            Timber.d("employeeId is set to: %s", employeeId);
-        });
+//        viewModel.employeeId.observe(getViewLifecycleOwner(), employeeId -> {
+//            Timber.d("employeeId is set to: %s", employeeId);
+//        });
     }
 
 
