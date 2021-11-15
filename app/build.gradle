@@ -45,6 +45,9 @@ android {
 }
 
 dependencies {
+    implementation(name:'st25_android_reader_interface-1.0.8-release', ext:'aar')
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'
@@ -55,6 +58,7 @@ dependencies {
 
     // butter knife
     implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+    implementation files('libs/st25sdk-1.10.0.jar')
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
