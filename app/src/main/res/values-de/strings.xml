@@ -34,5 +34,7 @@
     <string name="label_1_year">in 1 Jahr</string>
     <string name="label_2_years">in 2 Jahren</string>
     <string name="next_date">Nächte Wartung</string>
+    <string name="nfc_currently_disabled">NFC ist deaktiviert!</string>
+    <string name="msg_start_tag_discovery">NFC-Tag wird detektiert</string>
 
 </resources>

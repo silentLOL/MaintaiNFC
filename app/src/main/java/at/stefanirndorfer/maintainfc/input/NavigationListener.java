@@ -1,10 +1,8 @@
 package at.stefanirndorfer.maintainfc.input;
 
-import android.nfc.Tag;
-import android.os.Bundle;
 import android.os.Parcelable;
 
-import at.stefanirndorfer.maintainfc.model.MaintenanceData;
+import com.st.st25sdk.NFCTag;
 
 public interface NavigationListener {
     void navigateToSetEmployeeIdFragment();
@@ -38,6 +36,6 @@ public interface NavigationListener {
      *
      * @return
      */
-    Tag getNFCTag();
+    NFCTag getNFCTag();
 
 }

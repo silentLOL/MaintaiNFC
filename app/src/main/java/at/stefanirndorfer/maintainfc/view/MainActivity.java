@@ -1,24 +1,31 @@
 package at.stefanirndorfer.maintainfc.view;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
+import android.nfc.NfcManager;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.st.st25sdk.NFCTag;
+import com.st.st25sdk.STException;
+import com.st.st25sdk.TagHelper;
+
+import java.util.Objects;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
 import at.stefanirndorfer.maintainfc.R;
 import at.stefanirndorfer.maintainfc.input.NavigationListener;
-import at.stefanirndorfer.maintainfc.viewmodel.ResultsViewModel;
+import at.stefanirndorfer.maintainfc.util.TagDiscovery;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements NavigationListener {
+public class MainActivity extends AppCompatActivity implements NavigationListener, TagDiscovery.onTagDiscoveryCompletedListener {
 
     private FragmentManager fragmentManager;
 
@@ -27,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     PendingIntent pendingIntent;
     IntentFilter writeTagFilters[];
     boolean writeMode;
-    Tag myTag;
+    NFCTag myTag;
 
     // this determines if a particular fragment in foreground
     // allows to read nfc. E.g. if we want to write only we don't need to read at the same time
@@ -68,8 +75,24 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     @Override
     public void onResume() {
         super.onResume();
-        writeModeOn();
+        if (!isNfCEnabled()) {
+            // nfc is disabled
+            Toast.makeText(this, R.string.nfc_currently_disabled, Toast.LENGTH_LONG).show();
+        } else {
+            writeModeOn();
+        }
     }
+
+    private boolean isNfCEnabled() {
+        NfcManager manager = (NfcManager) this.getSystemService(Context.NFC_SERVICE);
+        NfcAdapter adapter = manager.getDefaultAdapter();
+        if (adapter != null && adapter.isEnabled()) {
+            // adapter exists and is enabled.
+            return true;
+        }
+        return false;
+    }
+
     ////////////////////////////////////
     // Lifecycle handling end
     ////////////////////////////////////
@@ -100,9 +123,9 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
         super.onNewIntent(intent);
         setIntent(intent);
         readFromIntent(intent);
-        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
-            myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        }
+        //        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
+        //            myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+        //        }
     }
 
     private void readFromIntent(Intent intent) {
@@ -110,22 +133,20 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
             || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
             || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
-            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-            if (isNFCReadingAllowed) {
-                Timber.d("current fragment allows to read");
-                ReadFromTagFragment readFromTagFragment = (ReadFromTagFragment) fragmentManager.findFragmentByTag(ReadFromTagFragment.class.getCanonicalName());
-                if (readFromTagFragment != null) {
-                    Timber.d("message can be set to an existing ReadFromTagFragment");
-                    readFromTagFragment.setRawMessage(rawMsgs);
-                    return;
-                }
-                Timber.d("navigating to ReadFromTagFragment with a rawMessage");
-                navigateToReadFromTagFragment(rawMsgs);
-                return;
+
+            // If the resume was triggered by an NFC event, it will contain an EXTRA_TAG providing
+            // the handle of the NFC Tag
+            Tag androidTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            if (androidTag != null) {
+                Toast.makeText(this, getString(R.string.msg_start_tag_discovery), Toast.LENGTH_SHORT).show();
+                // This action will be done in an Asynchronous task.
+                // onTagDiscoveryCompleted() of current activity is called when discovery is completed.
+                new TagDiscovery(this).execute(androidTag);
             }
-            Timber.d("current fragment does not allow to read");
         }
+
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -205,10 +226,10 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     @Override
     public void navigateToReadFromTagFragment() {
         Timber.d("navigating to ReadFromTagFragment");
-//
-//        // we need to clear the data first
-//        ResultsViewModel model = new ViewModelProvider(this).get(ResultsViewModel.class);
-//        model.clearData();
+        //
+        //        // we need to clear the data first
+        //        ResultsViewModel model = new ViewModelProvider(this).get(ResultsViewModel.class);
+        //        model.clearData();
 
         ReadFromTagFragment readFromTagFragment = ReadFromTagFragment.newInstance(null);
         fragmentManager.beginTransaction()
@@ -251,13 +272,13 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     @Override
     public void showHomeButton() {
         Timber.d("showing back navigation button");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
     public void hideHomeButton() {
         Timber.d("hiding back navigation button");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
     }
 
     @Override
@@ -271,8 +292,67 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     }
 
     @Override
-    public Tag getNFCTag() {
+    public NFCTag getNFCTag() {
         return myTag;
+    }
+
+    /**
+     * callback from the TagDiscovery util class
+     *
+     * @param nfcTag
+     * @param productId
+     * @param e
+     */
+    @Override
+    public void onTagDiscoveryCompleted(NFCTag nfcTag, TagHelper.ProductID productId, STException e) {
+        Timber.d("onTagDiscoveryCompleted");
+        if (nfcTag == null) {
+            Toast.makeText(this, "Tag discovery failed!", Toast.LENGTH_LONG).show();
+            return;
+        }
+        // we need to eliminate unsupported product Ids
+        switch (productId) {
+            case PRODUCT_ST_ST25DV64K_I:
+            case PRODUCT_ST_ST25DV64K_J:
+            case PRODUCT_ST_ST25DV16K_I:
+            case PRODUCT_ST_ST25DV16K_J:
+            case PRODUCT_ST_ST25DV04K_I:
+            case PRODUCT_ST_ST25DV04K_J:
+            case PRODUCT_ST_ST25DV04KC_I:
+            case PRODUCT_ST_ST25DV04KC_J:
+            case PRODUCT_ST_ST25DV16KC_I:
+            case PRODUCT_ST_ST25DV16KC_J:
+            case PRODUCT_ST_ST25DV64KC_I:
+            case PRODUCT_ST_ST25DV64KC_J:
+                Timber.d("discovered NFCTag is supported");
+                myTag = nfcTag;
+                String tagName = nfcTag.getName();
+                Toast.makeText(this, "Tag discovery done. Found tag: " + tagName, Toast.LENGTH_LONG).show();
+                prepareForwardNavigationToRead();
+                //checkMailboxActivation();
+                //startTagActivity(ST25DVActivity.class, R.string.st25dv_menus);
+                break;
+            default:
+                Timber.d("discovered NFCTag is NOT supported");
+        }
+
+    }
+
+    private void prepareForwardNavigationToRead() {
+        if (!isNFCReadingAllowed) {
+            Timber.d("current fragment does not allow to read");
+            return;
+        }
+        Timber.d("current fragment allows to read");
+        ReadFromTagFragment readFromTagFragment = (ReadFromTagFragment) fragmentManager.findFragmentByTag(ReadFromTagFragment.class.getCanonicalName());
+        if (readFromTagFragment != null) {
+            Timber.d("message can be set to an existing ReadFromTagFragment");
+            // todo pass in the tag rather than the message
+            readFromTagFragment.setRawMessage(rawMsgs);
+            return;
+        }
+        Timber.d("navigating to ReadFromTagFragment with a rawMessage");
+        navigateToReadFromTagFragment(rawMsgs);
     }
 
 }

@@ -33,4 +33,6 @@
     <string name="label_1_year">in 1 year</string>
     <string name="label_2_years">in 2 years</string>
     <string name="next_date">Next Date</string>
+    <string name="nfc_currently_disabled">NFC currently disabled!</string>
+    <string name="msg_start_tag_discovery">Starting NFC-Tag discovery</string>
 </resources>
