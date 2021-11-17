@@ -8,13 +8,13 @@ import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
 import android.nfc.Tag;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.st.st25sdk.NFCTag;
 import com.st.st25sdk.STException;
 import com.st.st25sdk.TagHelper;
+import com.st.st25sdk.ndef.NDEFMsg;
 
 import java.util.Objects;
 
@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import at.stefanirndorfer.maintainfc.R;
 import at.stefanirndorfer.maintainfc.input.NavigationListener;
+import at.stefanirndorfer.maintainfc.util.Constants;
 import at.stefanirndorfer.maintainfc.util.TagDiscovery;
 import timber.log.Timber;
 
@@ -55,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
         }
         isNFCReadingAllowed = true; /* for the case the nfc reading was triggered from the outside */
         checkNFCSupport();
-        readFromIntent(getIntent());
 
         pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
@@ -78,9 +78,9 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
         if (!isNfCEnabled()) {
             // nfc is disabled
             Toast.makeText(this, R.string.nfc_currently_disabled, Toast.LENGTH_LONG).show();
-        } else {
-            writeModeOn();
         }
+        writeModeOn();
+        readFromIntent(getIntent());
     }
 
     private boolean isNfCEnabled() {
@@ -121,11 +121,9 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        Timber.d("onNewIntent %s", intent);
+        // onResume gets called after this to handle the intent
         setIntent(intent);
-        readFromIntent(intent);
-        //        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
-        //            myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        //        }
     }
 
     private void readFromIntent(Intent intent) {
@@ -133,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
             || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
             || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
-
             // If the resume was triggered by an NFC event, it will contain an EXTRA_TAG providing
             // the handle of the NFC Tag
             Tag androidTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -141,10 +138,16 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
                 Toast.makeText(this, getString(R.string.msg_start_tag_discovery), Toast.LENGTH_SHORT).show();
                 // This action will be done in an Asynchronous task.
                 // onTagDiscoveryCompleted() of current activity is called when discovery is completed.
-                new TagDiscovery(this).execute(androidTag);
+                Timber.d("starting tag discovery");
+                startTagDiscovery(androidTag);
             }
         }
 
+    }
+
+
+    public void startTagDiscovery(Tag androidTag) {
+        new TagDiscovery(this).execute(androidTag);
     }
 
 
@@ -239,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     }
 
     @Override
-    public void navigateToReadFromTagFragment(Parcelable[] rawMessage) {
+    public void navigateToReadFromTagFragment(NDEFMsg rawMessage) {
         Timber.d("navigating to ReadFromTagFragment with raw message");
         ReadFromTagFragment readFromTagFragment = ReadFromTagFragment.newInstance(rawMessage);
         fragmentManager.beginTransaction()
@@ -328,9 +331,14 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
                 myTag = nfcTag;
                 String tagName = nfcTag.getName();
                 Toast.makeText(this, "Tag discovery done. Found tag: " + tagName, Toast.LENGTH_LONG).show();
-                prepareForwardNavigationToRead();
-                //checkMailboxActivation();
-                //startTagActivity(ST25DVActivity.class, R.string.st25dv_menus);
+                if (isNFCReadingAllowed) {
+                    prepareForwardNavigationToRead();
+                } else {
+                    WriteToTagFragment writeToTagFragment = (WriteToTagFragment) fragmentManager.findFragmentByTag(WriteToTagFragment.class.getCanonicalName());
+                    if(writeToTagFragment != null){
+                     writeToTagFragment.setNFCTagToWriteOn(myTag);
+                    }
+                }
                 break;
             default:
                 Timber.d("discovered NFCTag is NOT supported");
@@ -348,11 +356,25 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
         if (readFromTagFragment != null) {
             Timber.d("message can be set to an existing ReadFromTagFragment");
             // todo pass in the tag rather than the message
-            readFromTagFragment.setRawMessage(rawMsgs);
+            new Thread(() -> {
+                try {
+                   byte[] bytes = myTag.readBytes(Constants.DATA_OFFSET, Constants.TOTAL_DATA_LENGTH);
+                    this.runOnUiThread(() -> readFromTagFragment.setTagData(bytes));
+                } catch (STException e) {
+                    e.printStackTrace();
+                }
+            }).start();
             return;
         }
         Timber.d("navigating to ReadFromTagFragment with a rawMessage");
-        navigateToReadFromTagFragment(rawMsgs);
+        new Thread(() -> {
+            try {
+                NDEFMsg ndefMsg = myTag.readNdefMessage();
+                this.runOnUiThread(() -> navigateToReadFromTagFragment(ndefMsg));
+            } catch (STException e) {
+                this.runOnUiThread(() -> e.printStackTrace());
+            }
+        }).start();
     }
 
 }

@@ -1,11 +1,16 @@
 package at.stefanirndorfer.maintainfc.view;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.st.st25sdk.NFCTag;
+import com.st.st25sdk.ndef.NDEFMsg;
+import com.st.st25sdk.ndef.NDEFRecord;
+
+import java.io.Serializable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,10 +30,10 @@ public class ReadFromTagFragment extends BaseFragment {
 
     public static final String RAW_MESSAGE_KEY = "RAW_MESSAGE_KEY";
 
-    public static ReadFromTagFragment newInstance(Parcelable[] rawMessage) {
+    public static ReadFromTagFragment newInstance(NDEFMsg msg) {
         ReadFromTagFragment fragment = new ReadFromTagFragment();
         Bundle args = new Bundle();
-        args.putParcelableArray(RAW_MESSAGE_KEY, rawMessage);
+        args.putSerializable(RAW_MESSAGE_KEY, msg);
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,6 +48,8 @@ public class ReadFromTagFragment extends BaseFragment {
         ReadFromTagViewModel readFromTagViewModel = new ViewModelProvider(requireActivity()).get(ReadFromTagViewModel.class);
         ((ReadFromTagFragmentBinding) binding).setViewModel(readFromTagViewModel);
         showDataFromArgsIfGiven(readFromTagViewModel);
+        //NFCTag nfcTag = navigationListener.getNFCTag();
+        //getTranslationFromViewModel(nfcTag, readFromTagViewModel);
         ResultsViewModel model = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
 
         // lets clear the data at the beginning
@@ -84,16 +91,17 @@ public class ReadFromTagFragment extends BaseFragment {
     }
 
     private void showDataFromArgsIfGiven(ReadFromTagViewModel readFromTagViewModel) {
-        if (getArguments().getParcelableArray(RAW_MESSAGE_KEY) == null) {
+        assert getArguments() != null;
+        if (getArguments().getSerializable(RAW_MESSAGE_KEY) == null) {
             Timber.d("no rawMessage set yet");
             return;
         }
-        getTranslationFromViewModel(getArguments().getParcelableArray(RAW_MESSAGE_KEY), readFromTagViewModel);
+        getTranslationFromViewModel(getArguments().getSerializable(RAW_MESSAGE_KEY), readFromTagViewModel);
     }
 
-    private void getTranslationFromViewModel(Parcelable[] rawMessage, ReadFromTagViewModel readFromTagViewModel) {
-        Timber.d("setting rawMessage to viewModel");
-        readFromTagViewModel.processNewMessage(rawMessage);
+    private void getTranslationFromViewModel(Serializable msg, ReadFromTagViewModel readFromTagViewModel) {
+        Timber.d("setting tag to viewModel");
+        readFromTagViewModel.processNewMessage(msg);
     }
 
     @Override
@@ -116,8 +124,10 @@ public class ReadFromTagFragment extends BaseFragment {
         getActivity().setTitle(R.string.read_tag_toolbar_title);
     }
 
-    public void setRawMessage(Parcelable[] rawMessage) {
+
+    public void setTagData(byte[] bytes) {
         ReadFromTagViewModel readFromTagViewModel = new ViewModelProvider(requireActivity()).get(ReadFromTagViewModel.class);
-        getTranslationFromViewModel(rawMessage, readFromTagViewModel);
+        getTranslationFromViewModel(bytes, readFromTagViewModel);
+
     }
 }

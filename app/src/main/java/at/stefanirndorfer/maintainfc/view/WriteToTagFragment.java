@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.st.st25sdk.NFCTag;
+
 import java.io.IOException;
 
 import androidx.annotation.NonNull;
@@ -35,18 +37,7 @@ public class WriteToTagFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         Timber.d("onResume()");
-        ResultsViewModel model = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
-        WriteToTagViewModel writeToTagViewModel = new ViewModelProvider(requireActivity()).get(WriteToTagViewModel.class);
-        MaintenanceData maintenanceData = model.getMaintenanceData();
-        if (maintenanceData == null) {
-            Toast.makeText(this.getContext(), getString(R.string.data_incomplete_error_msg), LENGTH_LONG).show();
-            throw new IllegalArgumentException("Data area incomplete");
-        }
-        try {
-            writeToTagViewModel.write(maintenanceData, navigationListener.getNFCTag());
-        } catch (IOException e) {
-            Timber.e(e);
-        }
+
     }
 
     @Override
@@ -94,5 +85,23 @@ public class WriteToTagFragment extends BaseFragment {
     public void navigateForward() {
         Timber.d("write success -- we are navigating forward");
         navigationListener.navigateToSummaryFragment();
+    }
+
+    public void setNFCTagToWriteOn(NFCTag myTag) {
+        Timber.d("finally received our tag");
+        ResultsViewModel model = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
+        WriteToTagViewModel writeToTagViewModel = new ViewModelProvider(requireActivity()).get(WriteToTagViewModel.class);
+        MaintenanceData maintenanceData = model.getMaintenanceData();
+        if (maintenanceData == null) {
+            Toast.makeText(this.getContext(), getString(R.string.data_incomplete_error_msg), LENGTH_LONG).show();
+            throw new IllegalArgumentException("Data area incomplete");
+        }
+        new Thread(() -> {
+            try {
+                writeToTagViewModel.write(maintenanceData, myTag);
+            } catch (IOException e) {
+                Timber.e(e);
+            }
+        }).start();
     }
 }

@@ -3,6 +3,9 @@ package at.stefanirndorfer.maintainfc.input;
 import android.os.Parcelable;
 
 import com.st.st25sdk.NFCTag;
+import com.st.st25sdk.ndef.NDEFMsg;
+
+import java.io.Serializable;
 
 public interface NavigationListener {
     void navigateToSetEmployeeIdFragment();
@@ -17,7 +20,7 @@ public interface NavigationListener {
 
     void navigateToReadFromTagFragment();
 
-    void navigateToReadFromTagFragment(Parcelable[] rawMessage);
+    void navigateToReadFromTagFragment(NDEFMsg msg);
 
     void navigateToFormatTagFragment();
 
@@ -37,5 +40,4 @@ public interface NavigationListener {
      * @return
      */
     NFCTag getNFCTag();
-
 }

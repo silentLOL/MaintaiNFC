@@ -6,10 +6,21 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 
+import com.st.st25sdk.type5.st25dv.ST25DVTag;
+import com.st.st25sdk.NFCTag;
+import com.st.st25sdk.STException;
+import com.st.st25sdk.ndef.AarRecord;
+import com.st.st25sdk.ndef.EmptyRecord;
+import com.st.st25sdk.ndef.NDEFMsg;
+import com.st.st25sdk.ndef.NDEFRecord;
+import com.st.st25sdk.ndef.TextRecord;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.Locale;
 
 import androidx.lifecycle.ViewModel;
 import at.stefanirndorfer.maintainfc.model.MaintenanceData;
@@ -43,7 +54,7 @@ public class WriteToTagViewModel extends ViewModel {
      * @param tag
      * @throws IOException
      */
-    public void write(MaintenanceData data, Tag tag) throws IOException {
+    public void write(MaintenanceData data, NFCTag tag) throws IOException {
         long timeStampNext = data.getNextTimestamp();
         Integer employeeId = HARD_CODED_EMPLOYEE_ID;
         Long timestamp = data.getTimestamp();
@@ -69,8 +80,14 @@ public class WriteToTagViewModel extends ViewModel {
         System.arraycopy(employeeIdBytes, 0, fullBytes, EMPLOYEE_ID_INDEX, employeeIdBytes.length);
         System.arraycopy(timestampThisBytes, 0, fullBytes, TIMESTAMP_THIS_INDEX, timestampThisBytes.length);
         System.arraycopy(timestampNextBytes, 0, fullBytes, TIMESTAMP_NEXT_INDEX, timestampNextBytes.length);
-        NdefRecord[] records = {createRecord(fullBytes)};
-        NdefMessage message = new NdefMessage(records);
+//     //   NDEFRecord[] records = {createRecord(fullBytes)};
+//        NDEFMsg message = null;
+//        try {
+//            message = new NDEFMsg(fullBytes);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
         try {
             // this is needed in case you have a new NFC Tag and it needs to be formatted before use
             String[] techList = tag.getTechList();
@@ -81,27 +98,33 @@ public class WriteToTagViewModel extends ViewModel {
             if (techListContainsFormatable(techList)) {
                 Timber.d("formatting tag");
                 // if tag needs to be formatted techlist contains: "android.nfc.tech.NdefFormatable"
-                NdefFormatable ndefFormatable = NdefFormatable.get(tag);
-                ndefFormatable.connect();
-                ndefFormatable.format(message);
-                ndefFormatable.close();
-                writingResult.setValue(WriteToTagResult.FORMATTED);
+//                NdefFormatable ndefFormatable = NdefFormatable.get(tag);
+//                ndefFormatable.connect();
+//                ndefFormatable.format(message);
+//                ndefFormatable.close();
+//                writingResult.setValue(WriteToTagResult.FORMATTED);
                 return;
             }
+
             // Get an instance of Ndef for the tag.
             // if ndef is available, techList contains: android.nfc.tech.Ndef
-            Ndef ndef = Ndef.get(tag);
-            // Enable I/O
-            ndef.connect();
-            // Write the message
-            ndef.writeNdefMessage(message);
-            // Close the connection
-            ndef.close();
-            writingResult.setValue(WriteToTagResult.SUCCESS);
-        } catch (Exception e) {
+            ST25DVTag st25tag = (ST25DVTag)tag;
+            st25tag.presentPassword(0, );
+            st25tag.writePassword(0, );
+            tag.writeBytes(Constants.DATA_OFFSET, fullBytes);
+//            Ndef ndef = Ndef.get(tag);
+//            // Enable I/O
+//            ndef.connect();
+//            // Write the message
+//            ndef.writeNdefMessage(message);
+//            // Close the connection
+//            ndef.close();
+
+            writingResult.postValue(WriteToTagResult.SUCCESS);
+        } catch (Exception | STException e) {
             Timber.d("error writing connecting");
             Timber.e(e);
-            writingResult.setValue(WriteToTagResult.FAIL);
+            writingResult.postValue(WriteToTagResult.FAIL);
         }
     }
 
@@ -114,7 +137,7 @@ public class WriteToTagViewModel extends ViewModel {
         return false;
     }
 
-    private NdefRecord createRecord(byte[] textBytes) throws UnsupportedEncodingException {
+    private TextRecord createRecord(byte[] textBytes) throws UnsupportedEncodingException {
         String lang = "en";
         byte[] langBytes = lang.getBytes("US-ASCII");
         int langLength = langBytes.length;
@@ -128,8 +151,15 @@ public class WriteToTagViewModel extends ViewModel {
         System.arraycopy(langBytes, 0, payload, 1, langLength);
         System.arraycopy(textBytes, 0, payload, 1 + langLength, textLength);
 
-        NdefRecord recordNFC = new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], payload);
-
+       // NDEFRecord recordNFC = new NDEFRecord(NDEFRecord.TNF_WELLKNOWN, NDEFRecord.RTD_TEXT, new byte[0], payload);
+        TextRecord recordNFC = null;
+        try {
+            ByteArrayInputStream stream = new ByteArrayInputStream(payload);
+            String s = String.valueOf(payload);
+            //recordNFC = new TextRecord(stream, Locale.getDefault(), false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return recordNFC;
     }
 
