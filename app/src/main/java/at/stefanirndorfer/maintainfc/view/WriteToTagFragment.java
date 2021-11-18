@@ -56,6 +56,14 @@ public class WriteToTagFragment extends BaseFragment {
                 Toast.makeText(this.getContext(), getString(R.string.write_to_tag_error), LENGTH_LONG).show();
                 return;
             }
+            if (result.equals(WriteToTagResult.INVALID_TAG_TYPE)) {
+                Toast.makeText(this.getContext(), getString(R.string.invalid_tag_type_error), LENGTH_LONG).show();
+                return;
+            }
+            if (result.equals(WriteToTagResult.FAIL_INVALID_PASSWORD)) {
+                Toast.makeText(this.getContext(), getString(R.string.invalid_password_type_error), LENGTH_LONG).show();
+                return;
+            }
             if (result.equals(WriteToTagResult.SUCCESS) || result.equals(WriteToTagResult.FORMATTED)) {
                 navigateForward();
             }

@@ -40,6 +40,7 @@ public class SetNextDateTimeFragment extends BaseFragment {
         ((SetNextDateTimeFragmentBinding) binding).setViewModel(setNextDateTimeViewModel);
 
         setNextDateTimeViewModel.initDateTimeData();
+        setNextDateTimeViewModel.isNextButtonAvailable.setValue(false);
 
         ResultsViewModel model = new ViewModelProvider(requireActivity()).get(ResultsViewModel.class);
         long currTimeInMillis = Objects.requireNonNull(model.dateAndTimeCalendar.getValue()).getTimeInMillis();

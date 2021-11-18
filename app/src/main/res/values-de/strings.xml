@@ -36,5 +36,8 @@
     <string name="next_date">Nächte Wartung</string>
     <string name="nfc_currently_disabled">NFC ist deaktiviert!</string>
     <string name="msg_start_tag_discovery">NFC-Tag wird detektiert</string>
+    <string name="invalid_tag_type_error">NFC-Tag nicht unterstützt</string>
+    <string name="invalid_password_type_error">Authentifizierung fehlgeschlagen</string>
+
 
 </resources>

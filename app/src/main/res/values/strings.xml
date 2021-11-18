@@ -22,8 +22,8 @@
     <string name="write_to_tag_error">Error writing to Tag</string>
     <string name="data_incomplete_error_msg">Data are incomplete</string>
     <string name="failed_to_read_tag_msg">Failed to read NFC Tag</string>
-    <string name="read_tag_toolbar_title">NFC Auslesen</string>
-    <string name="summary_toolbar_title">Zusammenfassung</string>
+    <string name="read_tag_toolbar_title">Read from NFC</string>
+    <string name="summary_toolbar_title">Summary</string>
     <string name="employee_id_toolbar_title">Enter your Id</string>
     <string name="this_date_toolbar_title">Date and Time</string>
     <string name="next_date_toolbar_title">Next Service</string>
@@ -35,4 +35,6 @@
     <string name="next_date">Next Date</string>
     <string name="nfc_currently_disabled">NFC currently disabled!</string>
     <string name="msg_start_tag_discovery">Starting NFC-Tag discovery</string>
+    <string name="invalid_tag_type_error">NFC Tag not compatible</string>
+    <string name="invalid_password_type_error">Could not authenticate on NFC tag</string>
 </resources>
