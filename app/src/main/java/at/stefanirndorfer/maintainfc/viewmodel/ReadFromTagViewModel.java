@@ -1,13 +1,7 @@
 package at.stefanirndorfer.maintainfc.viewmodel;
 
-import android.nfc.NdefMessage;
-
-import com.st.st25sdk.ndef.NDEFMsg;
-import com.st.st25sdk.ndef.NDEFRecord;
-
 import java.io.Serializable;
 import java.nio.ByteBuffer;
-import java.util.List;
 
 import androidx.lifecycle.ViewModel;
 import at.stefanirndorfer.maintainfc.model.MaintenanceData;
@@ -17,7 +11,6 @@ import timber.log.Timber;
 
 import static at.stefanirndorfer.maintainfc.util.Constants.EMPLOYEE_ID_SIZE;
 import static at.stefanirndorfer.maintainfc.util.Constants.OUR_HEADER_LENGTH;
-import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_NEXT_INDEX;
 import static at.stefanirndorfer.maintainfc.util.Constants.TIMESTAMP_SIZE;
 import static at.stefanirndorfer.maintainfc.util.Constants.TOTAL_DATA_LENGTH;
 
@@ -33,18 +26,16 @@ public class ReadFromTagViewModel extends ViewModel {
     }
 
     public void processNewMessage(Serializable serializedBytes) {
-        byte[] payload = (byte[]) serializedBytes;
+        byte[] payload;
+        try {
+            payload = (byte[]) serializedBytes;
+        } catch (ClassCastException e) {
+            Timber.e(e, "Catch: Class cast exception occurred");
+            readingResult.setValue(ReadFromTagResult.FAIL);
+            return;
+        }
 
-
-        //        NdefMessage[] msgs = null;
-        //        if (nfcTag != null) {
-        //            msgs = new NdefMessage[nfcTag.length];
-        //            for (int i = 0; i < nfcTag.length; i++) {
-        //                msgs[i] = (NdefMessage) nfcTag[i];
-        //            }
-        //        }
-        //        buildTagViews(msgs);
-        if (payload.length != TOTAL_DATA_LENGTH) {
+        if (payload == null || payload.length != TOTAL_DATA_LENGTH) {
             Timber.w("msg is null or empty");
             readingResult.setValue(ReadFromTagResult.EMPTY);
             return;

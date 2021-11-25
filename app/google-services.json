@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "720937751962",
+    "project_id": "maintenfc",
+    "storage_bucket": "maintenfc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:720937751962:android:d0a05e56f8469063841623",
+        "android_client_info": {
+          "package_name": "at.stefanirndorfer.maintainfc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "720937751962-6apc1ci8kn34eg3b31l3n71430nme5mu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA55dmJnNkvBIAyJlrfdiKoZKuDO3tDHK0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "720937751962-6apc1ci8kn34eg3b31l3n71430nme5mu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
